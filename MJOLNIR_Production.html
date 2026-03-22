@@ -1,0 +1,2917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<title>MJOLNIR — AESIR Training Systems</title>
+<meta name="application-name" content="MJOLNIR">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="MJOLNIR">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#0f0f0a">
+<meta name="description" content="MJOLNIR — Military Joint Optimized Loadout, Navigation & Integrated Resilience. An AESIR Training System.">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;900&family=Barlow:wght@300;400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════════════
+   MJOLNIR — AESIR TRAINING SYSTEMS
+   Military Joint Optimized Loadout, Navigation
+   & Integrated Resilience
+   Olive Drab / Topographic Field Manual Aesthetic
+   ═══════════════════════════════════════════════════ */
+:root{
+  --bg:#0f0f0a;--bg2:#151510;
+  --surface:#1a1a13;--surface2:#202018;--surface3:#262620;
+  --border:#2a2a20;--border2:#333328;--border3:#3d3d30;
+  --od:#7a8c4a;--od2:#9aac5a;--od3:#b4c86a;
+  --tan:#c8b882;--tan2:#e0d09a;
+  --red:#c84a3a;--red2:#e05a4a;
+  --blue:#4a7aa0;--blue2:#5a9ac0;
+  --green:#4a8c5a;--green2:#5aac6a;
+  --amber:#c89a3a;
+  --text:#d8d4c0;--muted:#7a7860;--dim:#3a3828;
+  --white:#f0ece0;
+  --radius:3px;
+  --font:'Barlow',sans-serif;
+  --font-c:'Barlow Condensed',sans-serif;
+  --font-m:'Share Tech Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:var(--font);min-height:100vh;overflow-x:hidden;font-size:14px;line-height:1.5;}
+
+/* Topographic background */
+body::before{content:'';position:fixed;inset:0;
+  background-image:
+    repeating-radial-gradient(ellipse at 30% 40%,transparent 0,transparent 60px,rgba(122,140,74,.03) 60px,rgba(122,140,74,.03) 61px),
+    repeating-radial-gradient(ellipse at 70% 60%,transparent 0,transparent 80px,rgba(122,140,74,.025) 80px,rgba(122,140,74,.025) 81px),
+    repeating-radial-gradient(ellipse at 50% 20%,transparent 0,transparent 100px,rgba(122,140,74,.02) 100px,rgba(122,140,74,.02) 101px);
+  pointer-events:none;z-index:0;}
+body::after{content:'';position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events:none;z-index:0;opacity:.4;}
+
+.z1{position:relative;z-index:1;}
+.screen{display:none;min-height:100vh;}
+.screen.active{display:flex;flex-direction:column;}
+.hidden{display:none!important;}
+
+/* ── FORMS ── */
+input,select,textarea{
+  background:var(--surface2);border:1px solid var(--border2);color:var(--text);
+  font-family:var(--font);font-size:13px;border-radius:var(--radius);
+  padding:10px 12px;width:100%;transition:border .2s;}
+input:focus,select:focus,textarea:focus{outline:none;border-color:var(--od);}
+select{cursor:pointer;appearance:none;
+  background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%237a7860'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 12px center;}
+textarea{resize:vertical;min-height:60px;}
+label{display:block;font-family:var(--font-c);font-weight:700;font-size:10px;
+  letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  font-family:var(--font-c);font-weight:700;font-size:11px;letter-spacing:1.5px;
+  text-transform:uppercase;border:1px solid var(--border2);border-radius:var(--radius);
+  padding:10px 18px;cursor:pointer;transition:all .2s;background:var(--surface2);color:var(--text);}
+.btn:hover{border-color:var(--od);color:var(--od2);}
+.btn-primary{background:var(--od);color:var(--bg);border-color:var(--od);}
+.btn-primary:hover{background:var(--od2);border-color:var(--od2);}
+.btn-danger{border-color:var(--red);color:var(--red);}
+.btn-danger:hover{background:var(--red);color:var(--white);}
+.btn-ghost{background:transparent;border-color:var(--border);}
+.btn-sm{padding:7px 12px;font-size:10px;}
+.btn-xs{padding:5px 10px;font-size:9px;}
+.btn-block{width:100%;}
+.btn:disabled{opacity:.4;cursor:not-allowed;}
+
+/* ── NOTIFICATION ── */
+.notify{position:fixed;top:20px;right:20px;z-index:9000;
+  background:var(--surface2);border:1px solid var(--od);border-radius:var(--radius);
+  padding:12px 20px;font-family:var(--font-c);font-size:12px;letter-spacing:1px;
+  color:var(--od2);transform:translateX(120%);transition:transform .3s ease;max-width:340px;}
+.notify.show{transform:translateX(0);}
+.notify.error{border-color:var(--red);color:var(--red2);}
+
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;z-index:5000;background:rgba(0,0,0,.7);
+  display:none;align-items:center;justify-content:center;padding:20px;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--surface);border:1px solid var(--border2);border-radius:4px;
+  width:100%;max-width:480px;max-height:90vh;overflow-y:auto;padding:24px;}
+.modal-title{font-family:var(--font-c);font-weight:900;font-size:16px;
+  letter-spacing:2px;text-transform:uppercase;color:var(--od2);margin-bottom:16px;}
+.modal-row{margin-bottom:14px;}
+.modal-actions{display:flex;gap:10px;margin-top:20px;}
+
+/* ═════════════════════════════════════════════════
+   LOGIN SCREEN
+   ═════════════════════════════════════════════════ */
+#screen-login{align-items:center;justify-content:center;min-height:100vh;padding:20px;}
+.login-container{text-align:center;max-width:400px;width:100%;}
+.login-brand{margin-bottom:40px;}
+.login-icon{width:80px;height:80px;margin:0 auto 20px;
+  border:2px solid var(--od);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-c);font-weight:900;font-size:28px;color:var(--od2);
+  background:rgba(122,140,74,.08);letter-spacing:2px;}
+.login-title{font-family:var(--font-c);font-weight:900;font-size:32px;
+  letter-spacing:6px;text-transform:uppercase;color:var(--white);margin-bottom:6px;}
+.login-sub{font-family:var(--font-c);font-weight:600;font-size:10px;
+  letter-spacing:3px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+.login-sub2{font-family:var(--font-m);font-size:9px;color:var(--dim);letter-spacing:1px;}
+.login-form{margin-top:30px;}
+.login-form input{text-align:center;font-family:var(--font-m);font-size:15px;
+  letter-spacing:3px;padding:14px;text-transform:uppercase;margin-bottom:14px;}
+.login-or{font-family:var(--font-c);font-size:10px;color:var(--dim);
+  letter-spacing:2px;margin:16px 0;}
+
+/* ═════════════════════════════════════════════════
+   SETUP / ONBOARDING SCREEN
+   ═════════════════════════════════════════════════ */
+#screen-setup{align-items:center;justify-content:center;padding:20px;min-height:100vh;}
+.setup-container{width:100%;max-width:520px;}
+.setup-title{font-family:var(--font-c);font-weight:900;font-size:20px;
+  letter-spacing:3px;text-transform:uppercase;color:var(--od2);text-align:center;margin-bottom:6px;}
+.setup-sub{font-family:var(--font-c);font-size:10px;letter-spacing:2px;
+  color:var(--muted);text-align:center;margin-bottom:24px;}
+.setup-section{margin-bottom:20px;}
+.setup-section-title{font-family:var(--font-c);font-weight:700;font-size:11px;
+  letter-spacing:2px;color:var(--tan);text-transform:uppercase;margin-bottom:10px;
+  padding-bottom:6px;border-bottom:1px solid var(--border);}
+.setup-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.setup-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
+
+/* Path selector cards */
+.path-card{background:var(--surface);border:2px solid var(--border);border-radius:4px;
+  padding:20px;cursor:pointer;transition:all .25s;text-align:center;}
+.path-card:hover{border-color:var(--od);background:var(--surface2);}
+.path-card.selected{border-color:var(--od);background:rgba(122,140,74,.1);}
+.path-card-icon{font-size:28px;margin-bottom:8px;}
+.path-card-title{font-family:var(--font-c);font-weight:900;font-size:14px;
+  letter-spacing:2px;text-transform:uppercase;color:var(--white);margin-bottom:4px;}
+.path-card-desc{font-size:11px;color:var(--muted);line-height:1.4;}
+
+/* Domain priority drag */
+.domain-list{list-style:none;}
+.domain-item{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);
+  padding:8px 12px;margin-bottom:4px;display:flex;align-items:center;gap:10px;
+  cursor:grab;transition:all .15s;font-family:var(--font-c);font-size:12px;
+  letter-spacing:1px;color:var(--text);}
+.domain-item:active{cursor:grabbing;border-color:var(--od);background:var(--surface3);}
+.domain-rank{font-family:var(--font-m);font-size:10px;color:var(--od);min-width:18px;}
+.domain-name{flex:1;}
+.domain-toggle{width:16px;height:16px;border:1px solid var(--border2);border-radius:2px;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:10px;color:var(--od);transition:all .15s;}
+.domain-toggle.on{background:var(--od);border-color:var(--od);color:var(--bg);}
+
+/* ═════════════════════════════════════════════════
+   APP SCREEN — MAIN LAYOUT
+   ═════════════════════════════════════════════════ */
+#screen-app{height:100vh;overflow:hidden;}
+.topbar{height:48px;background:var(--bg2);border-bottom:1px solid var(--border);
+  display:flex;align-items:center;padding:0 16px;gap:12px;flex-shrink:0;z-index:100;}
+.topbar-brand{font-family:var(--font-c);font-weight:900;font-size:14px;
+  letter-spacing:3px;color:var(--od2);text-transform:uppercase;cursor:pointer;}
+.topbar-brand span{color:var(--muted);font-weight:600;font-size:10px;letter-spacing:1px;margin-left:8px;}
+.topbar-spacer{flex:1;}
+.topbar-user{font-family:var(--font-m);font-size:10px;color:var(--muted);}
+.topbar-btn{background:none;border:1px solid var(--border);color:var(--muted);
+  font-family:var(--font-c);font-size:10px;letter-spacing:1px;padding:5px 10px;
+  border-radius:var(--radius);cursor:pointer;transition:all .2s;}
+.topbar-btn:hover{border-color:var(--od);color:var(--od2);}
+
+.app-body{display:flex;flex:1;overflow:hidden;}
+
+/* Sidenav */
+.sidenav{width:200px;background:var(--bg2);border-right:1px solid var(--border);
+  overflow-y:auto;flex-shrink:0;display:flex;flex-direction:column;padding:12px 0;}
+.nav-section{padding:0 12px;margin-bottom:16px;}
+.nav-section-title{font-family:var(--font-c);font-weight:700;font-size:9px;
+  letter-spacing:2px;color:var(--dim);text-transform:uppercase;margin-bottom:6px;}
+.nav-item{display:flex;align-items:center;gap:8px;padding:8px 12px;
+  font-family:var(--font-c);font-weight:600;font-size:12px;letter-spacing:1px;
+  color:var(--muted);cursor:pointer;border-radius:var(--radius);transition:all .15s;
+  text-transform:uppercase;}
+.nav-item:hover{color:var(--text);background:var(--surface);}
+.nav-item.active{color:var(--od2);background:rgba(122,140,74,.1);border-left:2px solid var(--od);}
+.nav-item .nav-icon{font-size:14px;min-width:20px;text-align:center;}
+.nav-badge{margin-left:auto;font-family:var(--font-m);font-size:9px;
+  background:var(--od);color:var(--bg);padding:1px 5px;border-radius:2px;}
+
+/* Main content */
+.main-content{flex:1;overflow-y:auto;padding:20px;background:var(--bg);}
+.panel{display:none;}
+.panel.active{display:block;}
+.panel-title{font-family:var(--font-c);font-weight:900;font-size:18px;
+  letter-spacing:3px;text-transform:uppercase;color:var(--white);margin-bottom:4px;}
+.panel-sub{font-family:var(--font-c);font-size:10px;letter-spacing:2px;
+  color:var(--muted);margin-bottom:20px;}
+
+/* ── CARDS ── */
+.card{background:var(--surface);border:1px solid var(--border);border-radius:4px;
+  margin-bottom:12px;overflow:hidden;}
+.card-header{padding:12px 16px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:10px;}
+.card-title{font-family:var(--font-c);font-weight:700;font-size:13px;
+  letter-spacing:2px;text-transform:uppercase;color:var(--od2);}
+.card-body{padding:14px 16px;}
+.card-footer{padding:10px 16px;border-top:1px solid var(--border);
+  display:flex;align-items:center;gap:8px;}
+
+/* ── STAT BLOCKS ── */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:16px;}
+.stat-block{background:var(--surface);border:1px solid var(--border);border-radius:4px;padding:12px 14px;}
+.stat-label{font-family:var(--font-c);font-size:9px;letter-spacing:2px;
+  text-transform:uppercase;color:var(--muted);margin-bottom:4px;}
+.stat-value{font-family:var(--font-m);font-size:20px;color:var(--od2);}
+.stat-value small{font-size:11px;color:var(--muted);}
+.stat-sub{font-family:var(--font-m);font-size:9px;color:var(--dim);margin-top:2px;}
+
+/* ── WORKOUT DAY BLOCKS ── */
+.day-card{background:var(--surface);border:1px solid var(--border);border-radius:4px;margin-bottom:14px;}
+.day-header{padding:12px 16px;border-bottom:1px solid var(--border);
+  display:flex;align-items:center;gap:10px;}
+.day-tag{font-family:var(--font-c);font-weight:900;font-size:11px;
+  letter-spacing:2px;padding:3px 8px;border-radius:2px;text-transform:uppercase;}
+.day-tag.eod{background:rgba(122,140,74,.15);color:var(--od2);border:1px solid rgba(122,140,74,.3);}
+.day-tag.sfas{background:rgba(200,152,58,.12);color:var(--amber);border:1px solid rgba(200,152,58,.25);}
+.day-tag.pm{background:rgba(74,122,160,.12);color:var(--blue2);border:1px solid rgba(74,122,160,.25);}
+.day-tag.rest{background:rgba(74,140,90,.1);color:var(--green);border:1px solid rgba(74,140,90,.2);}
+.day-label{font-family:var(--font-c);font-weight:700;font-size:13px;
+  letter-spacing:1.5px;text-transform:uppercase;color:var(--text);flex:1;}
+.day-progress{width:80px;height:4px;background:var(--border);border-radius:2px;overflow:hidden;}
+.day-progress-fill{height:100%;background:var(--od);transition:width .3s;border-radius:2px;}
+.day-counter{font-family:var(--font-m);font-size:10px;color:var(--muted);}
+.day-body{padding:14px 16px;}
+.day-note{font-size:12px;color:var(--muted);font-style:italic;margin-bottom:10px;
+  padding:8px 12px;background:var(--surface2);border-left:2px solid var(--od);border-radius:0 2px 2px 0;}
+
+/* Exercise blocks */
+.ex-block{margin-bottom:8px;border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+.ex-header{display:flex;align-items:center;gap:8px;padding:8px 12px;
+  cursor:pointer;transition:background .15s;}
+.ex-header:hover{background:var(--surface2);}
+.ex-cb{width:18px;height:18px;border:1px solid var(--border2);border-radius:2px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  cursor:pointer;transition:all .15s;font-size:11px;color:transparent;}
+.ex-cb.checked{background:var(--od);border-color:var(--od);color:var(--bg);}
+.ex-name{font-family:var(--font-c);font-weight:600;font-size:12px;
+  letter-spacing:.5px;color:var(--text);flex:1;}
+.ex-header.done .ex-name{color:var(--muted);text-decoration:line-through;}
+.ex-meta{font-family:var(--font-m);font-size:10px;color:var(--od);white-space:nowrap;}
+.ex-detail{display:none;padding:8px 12px 10px 38px;background:var(--surface2);
+  border-top:1px solid var(--border);font-size:11px;color:var(--muted);line-height:1.5;}
+.ex-detail.open{display:block;}
+.ex-cue{color:var(--tan);font-style:italic;}
+
+/* Section headers within a day */
+.section-title{font-family:var(--font-c);font-weight:900;font-size:10px;
+  letter-spacing:2px;text-transform:uppercase;color:var(--tan);margin:12px 0 6px;
+  padding-bottom:4px;border-bottom:1px solid var(--border);}
+.section-title:first-child{margin-top:0;}
+
+/* AMRAP / Metcon blocks */
+.amrap-block{background:rgba(200,74,58,.06);border:1px solid rgba(200,74,58,.2);
+  border-radius:var(--radius);padding:10px 12px;margin:8px 0;}
+.amrap-title{font-family:var(--font-c);font-weight:900;font-size:11px;
+  letter-spacing:2px;color:var(--red2);margin-bottom:6px;}
+.amrap-item{font-family:var(--font-m);font-size:11px;color:var(--text);padding:2px 0;}
+
+/* ── LEADERBOARD ── */
+.lb-table{width:100%;border-collapse:collapse;}
+.lb-table th{font-family:var(--font-c);font-weight:700;font-size:10px;
+  letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);
+  text-align:left;padding:8px 12px;border-bottom:1px solid var(--border2);}
+.lb-table td{font-family:var(--font-m);font-size:12px;padding:10px 12px;
+  border-bottom:1px solid var(--border);color:var(--text);}
+.lb-rank{font-weight:700;color:var(--od2);}
+.lb-rank-1{color:var(--amber);}
+.lb-rank-2{color:var(--tan);}
+.lb-rank-3{color:var(--muted);}
+.lb-name{font-family:var(--font-c);font-weight:600;letter-spacing:.5px;}
+.lb-value{color:var(--od2);}
+
+/* ── RUCK PROGRESSION TABLE ── */
+.ruck-table{width:100%;border-collapse:collapse;font-size:12px;}
+.ruck-table th{font-family:var(--font-c);font-weight:700;font-size:10px;
+  letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);
+  padding:8px 10px;border-bottom:1px solid var(--border2);text-align:left;}
+.ruck-table td{font-family:var(--font-m);font-size:11px;padding:8px 10px;
+  border-bottom:1px solid var(--border);}
+.ruck-current{background:rgba(122,140,74,.1);border-left:3px solid var(--od);}
+
+/* ── INTEL / TIP BOXES ── */
+.intel-box{background:var(--surface2);border-left:3px solid var(--od);
+  border-radius:0 var(--radius) var(--radius) 0;padding:10px 14px;
+  font-size:12px;color:var(--text);margin:10px 0;line-height:1.5;}
+.intel-box.amber{border-left-color:var(--amber);}
+.intel-box.red{border-left-color:var(--red);}
+.intel-box.blue{border-left-color:var(--blue);}
+
+/* ── DOMAIN SKILL CARDS ── */
+.skill-card{background:var(--surface);border:1px solid var(--border);border-radius:4px;
+  margin-bottom:12px;overflow:hidden;}
+.skill-header{padding:12px 16px;display:flex;align-items:center;gap:10px;
+  cursor:pointer;transition:background .15s;}
+.skill-header:hover{background:var(--surface2);}
+.skill-icon{font-size:18px;min-width:24px;text-align:center;}
+.skill-title{font-family:var(--font-c);font-weight:700;font-size:13px;
+  letter-spacing:1.5px;text-transform:uppercase;color:var(--text);flex:1;}
+.skill-badge{font-family:var(--font-m);font-size:9px;padding:2px 6px;
+  border-radius:2px;background:rgba(122,140,74,.15);color:var(--od2);}
+.skill-body{display:none;padding:14px 16px;border-top:1px solid var(--border);}
+.skill-body.open{display:block;}
+.skill-checklist{list-style:none;}
+.skill-check{display:flex;align-items:flex-start;gap:8px;padding:6px 0;
+  border-bottom:1px solid var(--border);font-size:12px;color:var(--text);}
+.skill-check:last-child{border-bottom:none;}
+
+/* ── SEARCH ── */
+.search-bar{position:relative;margin-bottom:14px;}
+.search-bar input{padding-left:32px;font-family:var(--font-m);font-size:12px;}
+.search-bar::before{content:'⌕';position:absolute;left:10px;top:50%;
+  transform:translateY(-50%);color:var(--muted);font-size:14px;}
+
+/* ── TABS ── */
+.tab-bar{display:flex;gap:0;margin-bottom:16px;border-bottom:1px solid var(--border);}
+.tab-btn{font-family:var(--font-c);font-weight:700;font-size:11px;letter-spacing:1.5px;
+  text-transform:uppercase;color:var(--muted);padding:10px 16px;cursor:pointer;
+  border-bottom:2px solid transparent;transition:all .2s;background:none;border-top:none;border-left:none;border-right:none;}
+.tab-btn:hover{color:var(--text);}
+.tab-btn.active{color:var(--od2);border-bottom-color:var(--od);}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+
+/* ── WEEK SELECTOR ── */
+.week-bar{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:14px;}
+.week-btn{font-family:var(--font-m);font-size:10px;padding:5px 10px;
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  color:var(--muted);cursor:pointer;transition:all .15s;}
+.week-btn:hover{border-color:var(--od);color:var(--text);}
+.week-btn.active{background:var(--od);color:var(--bg);border-color:var(--od);}
+.week-btn.completed{border-color:var(--green);color:var(--green);}
+
+/* ── PHASE INDICATOR ── */
+.phase-bar{display:flex;gap:2px;margin-bottom:16px;}
+.phase-seg{flex:1;height:6px;background:var(--border);border-radius:3px;transition:background .3s;}
+.phase-seg.done{background:var(--od);}
+.phase-seg.current{background:var(--amber);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.5;}}
+.phase-labels{display:flex;justify-content:space-between;margin-bottom:14px;}
+.phase-label{font-family:var(--font-c);font-size:9px;letter-spacing:1.5px;
+  text-transform:uppercase;color:var(--dim);}
+.phase-label.current{color:var(--amber);font-weight:700;}
+.phase-label.done{color:var(--od);}
+
+/* ── STREAK ── */
+.streak-display{display:flex;align-items:center;gap:8px;
+  font-family:var(--font-m);font-size:14px;color:var(--od2);}
+.streak-fire{font-size:18px;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:768px){
+  .sidenav{display:none;}
+  .sidenav.mobile-open{display:flex;position:fixed;top:48px;left:0;bottom:0;
+    width:220px;z-index:500;background:var(--bg2);border-right:1px solid var(--border);}
+  .mobile-overlay{position:fixed;inset:0;top:48px;background:rgba(0,0,0,.5);
+    z-index:499;display:none;}
+  .mobile-overlay.show{display:block;}
+  .hamburger{display:block!important;}
+  .setup-grid{grid-template-columns:1fr;}
+  .stat-grid{grid-template-columns:1fr 1fr;}
+}
+@media(min-width:769px){
+  .hamburger{display:none!important;}
+  .mobile-overlay{display:none!important;}
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:6px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
+::-webkit-scrollbar-thumb:hover{background:var(--muted);}
+
+/* ── LOADING ── */
+.loading-screen{position:fixed;inset:0;z-index:10000;background:var(--bg);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.loading-spinner{width:40px;height:40px;border:3px solid var(--border);
+  border-top-color:var(--od);border-radius:50%;animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.loading-text{font-family:var(--font-m);font-size:11px;color:var(--muted);
+  margin-top:16px;letter-spacing:2px;}
+</style>
+</head>
+<body class="z1">
+
+<!-- LOADING -->
+<div id="loading" class="loading-screen">
+  <div class="loading-spinner"></div>
+  <div class="loading-text">INITIALIZING MJOLNIR...</div>
+</div>
+
+<!-- NOTIFICATION -->
+<div id="notify" class="notify"></div>
+
+<!-- ═══════════════════════════════════════════════
+     SCREEN: LOGIN
+     ═══════════════════════════════════════════════ -->
+<div id="screen-login" class="screen z1">
+  <div class="login-container">
+    <div class="login-brand">
+      <div class="login-icon">⚡</div>
+      <div class="login-title">MJOLNIR</div>
+      <div class="login-sub">MILITARY JOINT OPTIMIZED LOADOUT, NAVIGATION & INTEGRATED RESILIENCE</div>
+      <div class="login-sub2">AN AESIR TRAINING SYSTEM</div>
+    </div>
+    <div class="login-form">
+      <input type="text" id="login-code" placeholder="ENTER INVITE CODE" maxlength="30" autocomplete="off">
+      <button class="btn btn-primary btn-block" onclick="submitInviteCode()">JOIN THE FORGE</button>
+      <div class="login-or">— OR —</div>
+      <button class="btn btn-ghost btn-block" onclick="showReturning()">RETURNING MEMBER</button>
+    </div>
+    <!-- Returning member selector (hidden until clicked) -->
+    <div id="returning-section" class="hidden" style="margin-top:16px;">
+      <select id="returning-select" onchange="loginReturning()">
+        <option value="">SELECT YOUR PROFILE</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     SCREEN: SETUP / ONBOARDING
+     ═══════════════════════════════════════════════ -->
+<div id="screen-setup" class="screen z1">
+  <div class="setup-container">
+    <div class="login-icon" style="margin:0 auto 16px;">⚡</div>
+    <div class="setup-title">FORGE YOUR PROFILE</div>
+    <div class="setup-sub">EVERY FIELD MATTERS. FILL WHAT YOU KNOW.</div>
+
+    <!-- Step 1: Path Selection -->
+    <div id="setup-step-1">
+      <div class="setup-section">
+        <div class="setup-section-title">CHOOSE YOUR PATH</div>
+        <div class="setup-grid" id="path-selector">
+          <div class="path-card" onclick="selectPath('sfas',this)">
+            <div class="path-card-icon">🎯</div>
+            <div class="path-card-title">SFAS ONLY</div>
+            <div class="path-card-desc">Full SFAS preparation program. No EOD pipeline training.</div>
+          </div>
+          <div class="path-card" onclick="selectPath('eod_sfas',this)">
+            <div class="path-card-icon">⚡</div>
+            <div class="path-card-title">EOD + SFAS</div>
+            <div class="path-card-desc">EOD pipeline training with SFAS supplemental work layered in.</div>
+          </div>
+        </div>
+      </div>
+      <button class="btn btn-primary btn-block" onclick="setupNext(2)" id="step1-next" disabled>CONTINUE</button>
+    </div>
+
+    <!-- Step 2: Personal Info -->
+    <div id="setup-step-2" class="hidden">
+      <div class="setup-section">
+        <div class="setup-section-title">PERSONAL INFORMATION</div>
+        <div class="modal-row"><label>NAME / CALLSIGN</label><input type="text" id="s-name" placeholder="Your name"></div>
+        <div class="setup-grid-3">
+          <div class="modal-row"><label>AGE</label><input type="number" id="s-age" placeholder="30"></div>
+          <div class="modal-row"><label>HEIGHT</label><input type="text" id="s-height" placeholder="5'11&quot;"></div>
+          <div class="modal-row"><label>WEIGHT (LBS)</label><input type="number" id="s-bw" placeholder="180"></div>
+        </div>
+      </div>
+
+      <!-- SFAS timeline -->
+      <div class="setup-section">
+        <div class="setup-section-title">SFAS TIMELINE</div>
+        <div class="modal-row"><label>SFAS REPORT DATE (LEAVE BLANK IF OPEN-ENDED)</label>
+          <input type="date" id="s-sfas-date"></div>
+      </div>
+
+      <!-- EOD phase (only for eod_sfas path) -->
+      <div class="setup-section hidden" id="setup-eod-section">
+        <div class="setup-section-title">EOD PIPELINE STATUS</div>
+        <div class="setup-grid">
+          <div class="modal-row"><label>CURRENT PHASE</label>
+            <select id="s-eod-phase">
+              <option value="1">Phase 1</option><option value="2">Phase 2</option>
+              <option value="3">Phase 3</option><option value="34">Phase 3-4 Transition</option>
+              <option value="4">Phase 4</option><option value="6">Phase 6</option>
+            </select></div>
+          <div class="modal-row"><label>CURRENT WEEK IN PHASE</label>
+            <select id="s-eod-week">
+              <option value="1">Week 1</option><option value="2">Week 2</option>
+              <option value="3">Week 3</option><option value="4">Week 4</option>
+            </select></div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary btn-block" onclick="setupNext(3)">CONTINUE</button>
+      <button class="btn btn-ghost btn-block" style="margin-top:8px;" onclick="setupBack(1)">BACK</button>
+    </div>
+
+    <!-- Step 3: Baselines & Domain Priorities -->
+    <div id="setup-step-3" class="hidden">
+      <div class="setup-section">
+        <div class="setup-section-title">STRENGTH BASELINES (LEAVE BLANK IF UNKNOWN)</div>
+        <div class="setup-grid">
+          <div class="modal-row"><label>BACK SQUAT 1RM</label><input type="number" id="s-squat" placeholder="lbs"></div>
+          <div class="modal-row"><label>BENCH PRESS 1RM</label><input type="number" id="s-bench" placeholder="lbs"></div>
+          <div class="modal-row"><label>DEADLIFT 1RM</label><input type="number" id="s-dl" placeholder="lbs"></div>
+          <div class="modal-row"><label>STRICT PRESS 1RM</label><input type="number" id="s-press" placeholder="lbs"></div>
+          <div class="modal-row"><label>TRAP BAR DL 1RM</label><input type="number" id="s-trap" placeholder="lbs"></div>
+          <div class="modal-row"><label>PULL-UP MAX</label><input type="number" id="s-pullups" placeholder="reps"></div>
+        </div>
+      </div>
+
+      <div class="setup-section">
+        <div class="setup-section-title">RUN & RUCK BASELINES</div>
+        <div class="setup-grid">
+          <div class="modal-row"><label>3-MILE RUN TIME</label><input type="text" id="s-run3mi" placeholder="mm:ss"></div>
+          <div class="modal-row"><label>5K RUN TIME</label><input type="text" id="s-run5k" placeholder="mm:ss"></div>
+          <div class="modal-row"><label>RUCK PACE (min/mi)</label><input type="text" id="s-ruckpace" placeholder="14:30"></div>
+          <div class="modal-row"><label>MAX RUCK DISTANCE (mi)</label><input type="number" id="s-ruckdist" placeholder="6" step="0.5"></div>
+        </div>
+      </div>
+
+      <div class="setup-section">
+        <div class="setup-section-title">DOMAIN PRIORITIES — DRAG TO REORDER, TOGGLE ON/OFF</div>
+        <ul class="domain-list" id="domain-list"></ul>
+      </div>
+
+      <button class="btn btn-primary btn-block" onclick="completeSetup()">FORGE PROFILE</button>
+      <button class="btn btn-ghost btn-block" style="margin-top:8px;" onclick="setupBack(2)">BACK</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     SCREEN: MAIN APP
+     ═══════════════════════════════════════════════ -->
+<div id="screen-app" class="screen z1">
+  <div class="topbar">
+    <button class="hamburger topbar-btn" onclick="toggleMobileNav()">☰</button>
+    <div class="topbar-brand" onclick="navTo('dashboard')">MJOLNIR <span id="topbar-path"></span></div>
+    <div class="topbar-spacer"></div>
+    <div class="topbar-user" id="topbar-user"></div>
+    <button class="topbar-btn" onclick="logout()">EXIT</button>
+  </div>
+
+  <div class="mobile-overlay" id="mobile-overlay" onclick="toggleMobileNav()"></div>
+
+  <div class="app-body">
+    <nav class="sidenav" id="sidenav">
+      <div class="nav-section">
+        <div class="nav-section-title">TRAINING</div>
+        <div class="nav-item active" onclick="navTo('dashboard')"><span class="nav-icon">◉</span>Dashboard</div>
+        <div class="nav-item" onclick="navTo('workouts')"><span class="nav-icon">▣</span>Workouts</div>
+        <div class="nav-item" onclick="navTo('domains')"><span class="nav-icon">◈</span>Domains</div>
+        <div class="nav-item" onclick="navTo('ruck')"><span class="nav-icon">⬡</span>Ruck Program</div>
+        <div class="nav-item" onclick="navTo('nutrition')"><span class="nav-icon">◆</span>Nutrition</div>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">COMPETE</div>
+        <div class="nav-item" onclick="navTo('leaderboard')"><span class="nav-icon">▲</span>Leaderboard</div>
+        <div class="nav-item" onclick="navTo('tests')"><span class="nav-icon">◎</span>Test Results</div>
+        <div class="nav-item" onclick="navTo('log')"><span class="nav-icon">▦</span>Session Log</div>
+        <div class="nav-item" onclick="navTo('activity')"><span class="nav-icon">▤</span>Activity Log</div>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">TEAM</div>
+        <div class="nav-item" onclick="navTo('roster')"><span class="nav-icon">◫</span>Roster</div>
+        <div class="nav-item" onclick="navTo('messages')"><span class="nav-icon">◩</span>Messages</div>
+        <div class="nav-item" id="nav-admin" class="hidden" onclick="navTo('admin')"><span class="nav-icon">⚙</span>Admin</div>
+      </div>
+      <div class="nav-section">
+        <div class="nav-section-title">PROFILE</div>
+        <div class="nav-item" onclick="navTo('profile')"><span class="nav-icon">◉</span>My Profile</div>
+      </div>
+    </nav>
+
+    <div class="main-content" id="main-content">
+      <!-- Panels rendered by JS -->
+      <div id="panel-dashboard" class="panel active"></div>
+      <div id="panel-workouts" class="panel"></div>
+      <div id="panel-domains" class="panel"></div>
+      <div id="panel-ruck" class="panel"></div>
+      <div id="panel-nutrition" class="panel"></div>
+      <div id="panel-leaderboard" class="panel"></div>
+      <div id="panel-tests" class="panel"></div>
+      <div id="panel-log" class="panel"></div>
+      <div id="panel-activity" class="panel"></div>
+      <div id="panel-roster" class="panel"></div>
+      <div id="panel-messages" class="panel"></div>
+      <div id="panel-admin" class="panel"></div>
+      <div id="panel-profile" class="panel"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     MODALS
+     ═══════════════════════════════════════════════ -->
+<div class="modal-overlay" id="modal-log-session">
+  <div class="modal">
+    <div class="modal-title">LOG SESSION</div>
+    <div class="modal-row"><label>SESSION TYPE</label>
+      <select id="log-type">
+        <option value="strength">Strength</option><option value="ruck">Ruck</option>
+        <option value="run">Run</option><option value="swim">Swim</option>
+        <option value="metcon">Metcon</option><option value="team">Team Event</option>
+        <option value="landnav">Land Nav</option><option value="mental">Mental</option>
+      </select></div>
+    <div class="setup-grid">
+      <div class="modal-row"><label>DURATION (MIN)</label><input type="number" id="log-duration" placeholder="60"></div>
+      <div class="modal-row"><label>DATE</label><input type="date" id="log-date"></div>
+    </div>
+    <div class="setup-grid">
+      <div class="modal-row"><label>FEEL (1-10)</label><input type="number" id="log-feel" min="1" max="10" placeholder="7"></div>
+      <div class="modal-row"><label>RECOVERY (1-10)</label><input type="number" id="log-recovery" min="1" max="10" placeholder="7"></div>
+    </div>
+    <div class="modal-row"><label>NOTES</label><textarea id="log-notes" placeholder="How did it go?"></textarea></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-log-session')">CANCEL</button>
+      <button class="btn btn-primary" onclick="saveSessionLog()">SAVE</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-log-test">
+  <div class="modal">
+    <div class="modal-title">LOG TEST RESULT</div>
+    <div class="modal-row"><label>TEST</label>
+      <select id="test-type">
+        <option value="run_3mi">3-Mile Run</option><option value="run_5k">5K Run</option>
+        <option value="ruck_3mi">3-Mile Ruck</option><option value="ruck_6mi">6-Mile Ruck</option>
+        <option value="ruck_12mi">12-Mile Ruck</option>
+        <option value="row_1000m">1000m Row</option>
+        <option value="deadlift_5rm">Deadlift 5RM</option><option value="squat_3rm">Front Squat 3RM</option>
+        <option value="bench_5rm">Bench Press 5RM</option><option value="press_5rm">OHP 5RM</option>
+        <option value="pullup_max">Pull-up Max</option><option value="farmer_carry_400m">Farmer Carry 400m</option>
+        <option value="gruester_5min">GRUESTER 5min</option><option value="custom">Custom</option>
+      </select></div>
+    <div class="setup-grid">
+      <div class="modal-row"><label>VALUE</label><input type="text" id="test-value" placeholder="Time / weight / reps"></div>
+      <div class="modal-row"><label>DATE</label><input type="date" id="test-date"></div>
+    </div>
+    <div class="modal-row"><label>NOTES</label><textarea id="test-notes" placeholder="Conditions, how it felt..."></textarea></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-log-test')">CANCEL</button>
+      <button class="btn btn-primary" onclick="saveTestResult()">SAVE</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-generate-codes">
+  <div class="modal">
+    <div class="modal-title">GENERATE INVITE CODES</div>
+    <div class="setup-grid">
+      <div class="modal-row"><label>HOW MANY</label><input type="number" id="gen-count" value="5" min="1" max="20"></div>
+      <div class="modal-row"><label>ROLE</label>
+        <select id="gen-role"><option value="member">Member</option><option value="admin">Admin</option></select></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-generate-codes')">CANCEL</button>
+      <button class="btn btn-primary" onclick="generateCodes()">GENERATE</button>
+    </div>
+    <div id="gen-results" style="margin-top:12px;"></div>
+  </div>
+</div>
+
+<!-- RUCK LOG MODAL -->
+<div class="modal-overlay" id="modal-ruck-log">
+  <div class="modal">
+    <div class="modal-title">LOG RUCK</div>
+    <div class="setup-grid">
+      <div class="modal-row"><label>DATE</label><input type="date" id="rl-date"></div>
+      <div class="modal-row"><label>DISTANCE (MILES)</label><input type="number" id="rl-dist" step="0.1" placeholder="6.0"></div>
+    </div>
+    <div class="setup-grid">
+      <div class="modal-row"><label>LOAD (LBS)</label><input type="number" id="rl-load" placeholder="45"></div>
+      <div class="modal-row"><label>TOTAL TIME (mm:ss)</label><input type="text" id="rl-time" placeholder="84:30"></div>
+    </div>
+    <div class="setup-grid">
+      <div class="modal-row"><label>PACE / MILE (auto or override)</label><input type="text" id="rl-pace" placeholder="auto-calculated"></div>
+      <div class="modal-row"><label>RPE (1-10)</label><input type="number" id="rl-rpe" min="1" max="10" placeholder="7"></div>
+    </div>
+    <div class="modal-row"><label>TERRAIN</label>
+      <select id="rl-terrain"><option value="flat">Flat</option><option value="hilly">Hilly</option><option value="mixed">Mixed</option><option value="trail">Trail</option><option value="sand">Sand</option></select></div>
+    <div class="modal-row"><label>FOOT CONDITION</label>
+      <select id="rl-foot"><option value="good">Good — no issues</option><option value="hotspot">Hot spots developing</option><option value="blister">Blisters present</option><option value="pain">Foot/ankle pain</option></select></div>
+    <div class="modal-row"><label>ROUTE NOTES</label><textarea id="rl-route" placeholder="Route description, landmarks..."></textarea></div>
+    <div style="font-family:var(--font-c);font-size:9px;letter-spacing:1.5px;color:var(--dim);margin:10px 0 6px;">OPTIONAL FIELDS</div>
+    <div class="setup-grid">
+      <div class="modal-row"><label>WEATHER</label><input type="text" id="rl-weather" placeholder="75°F, humid"></div>
+      <div class="modal-row"><label>AVG HEART RATE</label><input type="number" id="rl-hr" placeholder="145"></div>
+    </div>
+    <div class="modal-row"><label>GEAR NOTES</label><textarea id="rl-gear" placeholder="Boot type, sock system, pack setup..."></textarea></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-ruck-log')">CANCEL</button>
+      <button class="btn btn-primary" onclick="saveRuckLog()">SAVE RUCK</button>
+    </div>
+  </div>
+</div>
+
+<!-- RUN LOG MODAL -->
+<div class="modal-overlay" id="modal-run-log">
+  <div class="modal">
+    <div class="modal-title">LOG RUN</div>
+    <div class="setup-grid">
+      <div class="modal-row"><label>DATE</label><input type="date" id="rn-date"></div>
+      <div class="modal-row"><label>RUN TYPE</label>
+        <select id="rn-type"><option value="z2">Zone 2 (Easy)</option><option value="tempo">Tempo</option><option value="interval">Interval</option><option value="lsd">Long Slow Distance</option><option value="fartlek">Fartlek</option><option value="race">Race / Time Trial</option></select></div>
+    </div>
+    <div class="setup-grid">
+      <div class="modal-row"><label>DISTANCE (MILES)</label><input type="number" id="rn-dist" step="0.1" placeholder="3.0"></div>
+      <div class="modal-row"><label>TOTAL TIME (mm:ss)</label><input type="text" id="rn-time" placeholder="24:30"></div>
+    </div>
+    <div class="setup-grid">
+      <div class="modal-row"><label>PACE / MILE (auto or override)</label><input type="text" id="rn-pace" placeholder="auto-calculated"></div>
+      <div class="modal-row"><label>RPE (1-10)</label><input type="number" id="rn-rpe" min="1" max="10" placeholder="6"></div>
+    </div>
+    <div class="modal-row"><label>TERRAIN</label>
+      <select id="rn-terrain"><option value="road">Road</option><option value="trail">Trail</option><option value="track">Track</option><option value="treadmill">Treadmill</option><option value="mixed">Mixed</option></select></div>
+    <div class="modal-row"><label>AVG HEART RATE (optional)</label><input type="number" id="rn-hr" placeholder="148"></div>
+    <div class="modal-row"><label>SPLITS / NOTES</label><textarea id="rn-notes" placeholder="Mile splits, how it felt, intervals performed..."></textarea></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-run-log')">CANCEL</button>
+      <button class="btn btn-primary" onclick="saveRunLog()">SAVE RUN</button>
+    </div>
+  </div>
+</div>
+
+<!-- LIFT LOG MODAL -->
+<div class="modal-overlay" id="modal-lift-log">
+  <div class="modal">
+    <div class="modal-title">LOG LIFT</div>
+    <div class="setup-grid">
+      <div class="modal-row"><label>DATE</label><input type="date" id="ll-date"></div>
+      <div class="modal-row"><label>EXERCISE</label>
+        <select id="ll-exercise">
+          <option value="back_squat">Back Squat</option><option value="front_squat">Front Squat</option>
+          <option value="bench_press">Bench Press</option><option value="close_grip_bench">Close Grip Bench</option>
+          <option value="deadlift">Deadlift</option><option value="trap_bar_dl">Trap Bar Deadlift</option>
+          <option value="rdl">Romanian Deadlift</option>
+          <option value="strict_press">Strict Press</option><option value="push_press">Push Press</option>
+          <option value="pendlay_row">Pendlay Row</option><option value="bent_row">Bent Over Row</option>
+          <option value="pullups">Pull-ups</option><option value="weighted_pullups">Weighted Pull-ups</option>
+          <option value="chinups">Chin-ups</option>
+          <option value="farmer_carry">Farmer Carry</option><option value="sandbag">Sandbag Work</option>
+          <option value="other">Other (specify in notes)</option>
+        </select></div>
+    </div>
+    <div id="ll-sets-container">
+      <div style="font-family:var(--font-c);font-size:9px;letter-spacing:1.5px;color:var(--muted);margin-bottom:6px;">SETS — ADD AS MANY AS NEEDED</div>
+      <div id="ll-sets-list"></div>
+      <button class="btn btn-ghost btn-xs" onclick="addLiftSet()" style="margin-top:6px;">+ ADD SET</button>
+    </div>
+    <div class="setup-grid" style="margin-top:12px;">
+      <div class="modal-row"><label>TEMPO USED</label><input type="text" id="ll-tempo" placeholder="2/0/1/1"></div>
+      <div class="modal-row"><label>REST BETWEEN SETS</label><input type="text" id="ll-rest" placeholder="2-3min"></div>
+    </div>
+    <div class="modal-row"><label>FORM NOTES / CUES TO SELF</label><textarea id="ll-form" placeholder="What felt good, what to fix next time..."></textarea></div>
+    <div class="modal-row" style="display:flex;align-items:center;gap:10px;">
+      <label style="margin:0;white-space:nowrap;">PERSONAL RECORD?</label>
+      <div class="domain-toggle" id="ll-pr" onclick="this.classList.toggle('on')">PR</div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="closeModal('modal-lift-log')">CANCEL</button>
+      <button class="btn btn-primary" onclick="saveLiftLog()">SAVE LIFT</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// MJOLNIR — MAIN APPLICATION SCRIPT
+// ═══════════════════════════════════════════════════════════════
+
+// ── SUPABASE CONFIG ──────────────────────────────────────────
+const SUPABASE_URL = 'https://dsnlebidabzbsdeqrhle.supabase.co';
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRzbmxlYmlkYWJ6YnNkZXFyaGxlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQxOTExMjIsImV4cCI6MjA4OTc2NzEyMn0.mPob5X6UkTISyzNZovXB9_gfGdpj0T8NKX87gA9N5KU';
+
+let sb = null; // Supabase client
+let ME = null; // Current profile
+let ALL_PROFILES = [];
+let activePanel = 'dashboard';
+let selectedPath = null;
+
+// ── SUPABASE INIT ────────────────────────────────────────────
+async function initSupabase() {
+  if (SUPABASE_URL === 'YOUR_SUPABASE_URL') {
+    // Demo mode — use localStorage
+    console.log('MJOLNIR running in demo mode (localStorage)');
+    return;
+  }
+  try {
+    const mod = await import('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm');
+    sb = mod.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    console.log('Supabase connected');
+  } catch(e) {
+    console.error('Supabase init failed:', e);
+  }
+}
+
+// ── DB HELPERS ───────────────────────────────────────────────
+async function dbGet(table, filters={}, order=null) {
+  if (!sb) {
+    const all = JSON.parse(localStorage.getItem('mj_'+table) || '[]');
+    let result = all;
+    for (const [k,v] of Object.entries(filters)) result = result.filter(r => r[k]===v);
+    if (order) result.sort((a,b) => order.asc ? (a[order.col]>b[order.col]?1:-1) : (b[order.col]>a[order.col]?1:-1));
+    return result;
+  }
+  let q = sb.from(table).select('*');
+  for (const [k,v] of Object.entries(filters)) q = q.eq(k, v);
+  if (order) q = q.order(order.col, {ascending: order.asc !== false});
+  const {data,error} = await q;
+  if (error) { console.error(table, error); return []; }
+  return data || [];
+}
+
+async function dbInsert(table, row) {
+  if (!sb) {
+    const all = JSON.parse(localStorage.getItem('mj_'+table) || '[]');
+    row.id = row.id || crypto.randomUUID();
+    row.created_at = row.created_at || new Date().toISOString();
+    all.push(row);
+    localStorage.setItem('mj_'+table, JSON.stringify(all));
+    return row;
+  }
+  const {data,error} = await sb.from(table).insert(row).select().single();
+  if (error) { console.error(table, error); return null; }
+  return data;
+}
+
+async function dbUpdate(table, id, updates) {
+  if (!sb) {
+    const all = JSON.parse(localStorage.getItem('mj_'+table) || '[]');
+    const idx = all.findIndex(r => r.id === id);
+    if (idx >= 0) { Object.assign(all[idx], updates, {updated_at: new Date().toISOString()}); localStorage.setItem('mj_'+table, JSON.stringify(all)); return all[idx]; }
+    return null;
+  }
+  const {data,error} = await sb.from(table).update({...updates, updated_at: new Date().toISOString()}).eq('id', id).select().single();
+  if (error) { console.error(table, error); return null; }
+  return data;
+}
+
+async function dbUpsert(table, row, conflictKeys) {
+  if (!sb) {
+    const all = JSON.parse(localStorage.getItem('mj_'+table) || '[]');
+    const idx = all.findIndex(r => conflictKeys.every(k => r[k]===row[k]));
+    if (idx >= 0) { Object.assign(all[idx], row); localStorage.setItem('mj_'+table, JSON.stringify(all)); return all[idx]; }
+    row.id = row.id || crypto.randomUUID();
+    row.created_at = new Date().toISOString();
+    all.push(row);
+    localStorage.setItem('mj_'+table, JSON.stringify(all));
+    return row;
+  }
+  const {data,error} = await sb.from(table).upsert(row, {onConflict: conflictKeys.join(',')}).select().single();
+  if (error) { console.error(table, error); return null; }
+  return data;
+}
+
+async function dbDelete(table, id) {
+  if (!sb) {
+    let all = JSON.parse(localStorage.getItem('mj_'+table) || '[]');
+    all = all.filter(r => r.id !== id);
+    localStorage.setItem('mj_'+table, JSON.stringify(all));
+    return true;
+  }
+  const {error} = await sb.from(table).delete().eq('id', id);
+  return !error;
+}
+
+// ── UTILITY ──────────────────────────────────────────────────
+function $(id) { return document.getElementById(id); }
+function showScreen(id) { document.querySelectorAll('.screen').forEach(s => s.classList.remove('active')); $(id).classList.add('active'); }
+function openModal(id) { $(id).classList.add('open'); }
+function closeModal(id) { $(id).classList.remove('open'); }
+function notify(msg, isError=false) {
+  const n = $('notify'); n.textContent = msg;
+  n.className = 'notify show' + (isError?' error':'');
+  setTimeout(() => n.classList.remove('show'), 3000);
+}
+function calcLoad(pct, orm) { return orm ? Math.round(orm * pct / 100 / 5) * 5 : pct + '%'; }
+function fmtLoad(pct, orm) { const v = calcLoad(pct, orm); return typeof v === 'number' ? v + '#' : v; }
+function today() { return new Date().toISOString().split('T')[0]; }
+
+// ── LOGIN FLOW ───────────────────────────────────────────────
+async function submitInviteCode() {
+  const code = $('login-code').value.trim().toUpperCase();
+  if (!code) return notify('Enter an invite code.', true);
+
+  const codes = await dbGet('invite_codes', {code, used: false});
+  if (!codes.length) return notify('Invalid or used invite code.', true);
+
+  const codeRow = codes[0];
+  selectedPath = null;
+  ME = { invite_code_used: code, role: codeRow.role };
+
+  // Mark code as used (we'll set used_by after profile creation)
+  await dbUpdate('invite_codes', codeRow.id, {used: true});
+
+  showScreen('screen-setup');
+  setupStep(1);
+}
+
+async function showReturning() {
+  $('returning-section').classList.remove('hidden');
+  ALL_PROFILES = await dbGet('profiles');
+  const sel = $('returning-select');
+  sel.innerHTML = '<option value="">SELECT YOUR PROFILE</option>';
+  ALL_PROFILES.forEach(p => {
+    sel.innerHTML += `<option value="${p.id}">${p.name} — ${p.path==='sfas'?'SFAS':'EOD+SFAS'}</option>`;
+  });
+}
+
+async function loginReturning() {
+  const id = $('returning-select').value;
+  if (!id) return;
+  const profiles = await dbGet('profiles', {id});
+  if (!profiles.length) return notify('Profile not found.', true);
+  ME = profiles[0];
+  await enterApp();
+}
+
+// ── SETUP FLOW ───────────────────────────────────────────────
+function setupStep(n) {
+  [1,2,3].forEach(i => $('setup-step-'+i).classList.toggle('hidden', i!==n));
+}
+function setupNext(n) { setupStep(n); }
+function setupBack(n) { setupStep(n); }
+
+function selectPath(path, el) {
+  selectedPath = path;
+  document.querySelectorAll('.path-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  $('step1-next').disabled = false;
+  // Show/hide EOD section
+  $('setup-eod-section').classList.toggle('hidden', path !== 'eod_sfas');
+}
+
+// Domain priority list with drag & toggle
+const ALL_DOMAINS = [
+  {key:'ruck', name:'Ruck Progression', icon:'⬡'},
+  {key:'strength', name:'Strength Training', icon:'▣'},
+  {key:'run', name:'Run Endurance', icon:'◇'},
+  {key:'swim', name:'Swim / Water Confidence', icon:'≋'},
+  {key:'landnav', name:'Land Navigation', icon:'◎'},
+  {key:'mental', name:'Mental Conditioning', icon:'◈'},
+  {key:'nutrition', name:'Nutrition & Fueling', icon:'◆'},
+  {key:'team', name:'Team Events / Buddy Work', icon:'◫'},
+];
+let domainOrder = ALL_DOMAINS.map(d => ({...d, enabled: true}));
+
+function renderDomainList() {
+  const ul = $('domain-list');
+  ul.innerHTML = '';
+  domainOrder.forEach((d, i) => {
+    const li = document.createElement('li');
+    li.className = 'domain-item';
+    li.draggable = true;
+    li.dataset.idx = i;
+    li.innerHTML = `
+      <span class="domain-rank">${i+1}</span>
+      <span class="domain-name">${d.icon} ${d.name}</span>
+      <span class="domain-toggle ${d.enabled?'on':''}" onclick="event.stopPropagation();toggleDomain(${i})">✓</span>`;
+    li.addEventListener('dragstart', e => { e.dataTransfer.setData('text', i); li.style.opacity='.5'; });
+    li.addEventListener('dragend', () => { li.style.opacity='1'; });
+    li.addEventListener('dragover', e => e.preventDefault());
+    li.addEventListener('drop', e => { e.preventDefault(); const from=parseInt(e.dataTransfer.getData('text')); reorderDomain(from, i); });
+    ul.appendChild(li);
+  });
+}
+function toggleDomain(i) { domainOrder[i].enabled = !domainOrder[i].enabled; renderDomainList(); }
+function reorderDomain(from, to) {
+  const item = domainOrder.splice(from, 1)[0];
+  domainOrder.splice(to, 0, item);
+  renderDomainList();
+}
+// Init on page load
+renderDomainList();
+
+async function completeSetup() {
+  const name = $('s-name').value.trim();
+  if (!name) return notify('Name is required.', true);
+  if (!selectedPath) return notify('Select a training path.', true);
+
+  // Check for duplicate: same name + same path = blocked
+  const existing = await dbGet('profiles');
+  const sameName = existing.filter(p => p.name.toLowerCase() === name.toLowerCase());
+  const sameNamePath = sameName.filter(p => p.path === selectedPath);
+  if (sameNamePath.length > 0) return notify('You already have a profile on this path. Use "Returning Member" to log in.', true);
+  if (sameName.length >= 2) return notify('Maximum 2 profiles per person (one per path). Use "Returning Member" to log in.', true);
+
+  const profile = {
+    name,
+    role: ME.role || 'member',
+    path: selectedPath,
+    bodyweight: parseInt($('s-bw').value) || null,
+    height: $('s-height').value.trim() || null,
+    age: parseInt($('s-age').value) || null,
+    sfas_date: $('s-sfas-date').value || null,
+    current_phase: 'base',
+    current_week: 1,
+    eod_phase: selectedPath === 'eod_sfas' ? parseInt($('s-eod-phase').value) : 1,
+    eod_week: selectedPath === 'eod_sfas' ? parseInt($('s-eod-week').value) : 1,
+    domain_priorities: JSON.stringify(domainOrder.filter(d=>d.enabled).map(d=>d.key)),
+    squat_1rm: parseInt($('s-squat').value) || null,
+    bench_1rm: parseInt($('s-bench').value) || null,
+    deadlift_1rm: parseInt($('s-dl').value) || null,
+    press_1rm: parseInt($('s-press').value) || null,
+    trap_1rm: parseInt($('s-trap').value) || null,
+    pullup_max: parseInt($('s-pullups').value) || null,
+    ruck_pace: $('s-ruckpace').value.trim() || null,
+    ruck_max_distance: parseFloat($('s-ruckdist').value) || null,
+    run_3mile: $('s-run3mi').value.trim() || null,
+    run_5k: $('s-run5k').value.trim() || null,
+    invite_code_used: ME.invite_code_used || null,
+    current_streak: 0,
+    longest_streak: 0,
+  };
+
+  const saved = await dbInsert('profiles', profile);
+  if (!saved) return notify('Failed to save profile.', true);
+  ME = saved;
+  await enterApp();
+}
+
+// ── ENTER APP ────────────────────────────────────────────────
+async function enterApp() {
+  localStorage.setItem('mj_active_profile', ME.id);
+  ALL_PROFILES = await dbGet('profiles');
+
+  // Update topbar
+  $('topbar-user').textContent = ME.name;
+  $('topbar-path').textContent = ME.path === 'sfas' ? '/ SFAS' : '/ EOD+SFAS';
+
+  // Show/hide admin nav
+  const adminNav = $('nav-admin');
+  if (ME.role === 'admin') adminNav.classList.remove('hidden');
+  else adminNav.classList.add('hidden');
+
+  $('loading').style.display = 'none';
+  showScreen('screen-app');
+  navTo('dashboard');
+}
+
+// ── NAVIGATION ───────────────────────────────────────────────
+function navTo(panel) {
+  activePanel = panel;
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  $('panel-'+panel).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => {
+    if (n.getAttribute('onclick')?.includes("'"+panel+"'")) n.classList.add('active');
+  });
+  // Close mobile nav
+  $('sidenav').classList.remove('mobile-open');
+  $('mobile-overlay').classList.remove('show');
+  // Build panel
+  buildPanel(panel);
+}
+
+function toggleMobileNav() {
+  $('sidenav').classList.toggle('mobile-open');
+  $('mobile-overlay').classList.toggle('show');
+}
+
+function logout() {
+  localStorage.removeItem('mj_active_profile');
+  ME = null;
+  showScreen('screen-login');
+}
+
+// ═══════════════════════════════════════════════════════════════
+// PANEL BUILDERS
+// ═══════════════════════════════════════════════════════════════
+
+async function buildPanel(name) {
+  switch(name) {
+    case 'dashboard': await buildDashboard(); break;
+    case 'workouts': await buildWorkouts(); break;
+    case 'domains': buildDomains(); break;
+    case 'ruck': buildRuck(); break;
+    case 'nutrition': buildNutrition(); break;
+    case 'leaderboard': await buildLeaderboard(); break;
+    case 'tests': await buildTests(); break;
+    case 'log': await buildLog(); break;
+    case 'activity': await buildActivity(); break;
+    case 'roster': await buildRoster(); break;
+    case 'messages': await buildMessages(); break;
+    case 'admin': await buildAdmin(); break;
+    case 'profile': buildProfile(); break;
+  }
+}
+
+// ── DASHBOARD ────────────────────────────────────────────────
+async function buildDashboard() {
+  const p = ME;
+  const logs = await dbGet('session_logs', {profile_id: p.id});
+  const thisWeekLogs = logs.filter(l => {
+    const d = new Date(l.session_date||l.created_at);
+    const now = new Date();
+    const weekStart = new Date(now); weekStart.setDate(now.getDate()-now.getDay());
+    return d >= weekStart;
+  });
+
+  const phases = ['base','build','peak','taper'];
+  const phaseIdx = phases.indexOf(p.current_phase);
+  const weeksOut = p.sfas_date ? Math.max(0, Math.ceil((new Date(p.sfas_date) - new Date()) / (7*24*60*60*1000))) : null;
+
+  let domains;
+  try { domains = JSON.parse(p.domain_priorities || '[]'); } catch(e) { domains = []; }
+
+  const html = `
+    <div class="panel-title">MISSION BRIEFING</div>
+    <div class="panel-sub">${p.path==='sfas'?'SFAS PREPARATION':'EOD PIPELINE + SFAS PREPARATION'} — ${p.current_phase.toUpperCase()} PHASE · WEEK ${p.current_week}</div>
+
+    <div class="phase-bar">
+      ${phases.map((ph,i) => `<div class="phase-seg ${i<phaseIdx?'done':''} ${i===phaseIdx?'current':''}"></div>`).join('')}
+    </div>
+    <div class="phase-labels">
+      ${phases.map((ph,i) => `<div class="phase-label ${i<phaseIdx?'done':''} ${i===phaseIdx?'current':''}">${ph}</div>`).join('')}
+    </div>
+
+    <div class="stat-grid">
+      <div class="stat-block">
+        <div class="stat-label">PHASE</div>
+        <div class="stat-value">${p.current_phase.toUpperCase()}</div>
+        <div class="stat-sub">Week ${p.current_week} of 4</div>
+      </div>
+      ${weeksOut!==null?`<div class="stat-block">
+        <div class="stat-label">WEEKS TO SFAS</div>
+        <div class="stat-value" style="color:${weeksOut<8?'var(--red)':weeksOut<16?'var(--amber)':'var(--od2)'}">${weeksOut}</div>
+        <div class="stat-sub">${p.sfas_date}</div>
+      </div>`:'<div class="stat-block"><div class="stat-label">TIMELINE</div><div class="stat-value" style="font-size:14px;">OPEN</div><div class="stat-sub">No fixed SFAS date</div></div>'}
+      <div class="stat-block">
+        <div class="stat-label">THIS WEEK</div>
+        <div class="stat-value">${thisWeekLogs.length}<small> sessions</small></div>
+      </div>
+      <div class="stat-block">
+        <div class="stat-label">STREAK</div>
+        <div class="stat-value"><span style="font-size:16px;">🔥</span> ${p.current_streak||0}<small> days</small></div>
+        <div class="stat-sub">Best: ${p.longest_streak||0}</div>
+      </div>
+      ${p.path==='eod_sfas'?`<div class="stat-block">
+        <div class="stat-label">EOD PHASE</div>
+        <div class="stat-value">${p.eod_phase}</div>
+        <div class="stat-sub">Week ${p.eod_week}</div>
+      </div>`:''}
+    </div>
+
+    <div style="display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap;">
+      <button class="btn btn-primary btn-sm" onclick="openModal('modal-log-session')">⊕ LOG SESSION</button>
+      <button class="btn btn-sm" onclick="openModal('modal-log-test')">◎ LOG TEST</button>
+      <button class="btn btn-sm" onclick="navTo('workouts')">▣ TODAY'S WORKOUT</button>
+    </div>
+
+    ${p.path==='eod_sfas'?`
+    <div class="intel-box amber">
+      <strong>DUAL PATH ACTIVE:</strong> Your EOD Phase ${p.eod_phase} workouts are your AM primary training. SFAS supplemental work appears as PM sessions and weekend standalone blocks. Recovery is the bridge — never let SFAS work degrade your EOD performance.
+    </div>`:''}
+
+    <div class="card">
+      <div class="card-header"><div class="card-title">ACTIVE DOMAINS</div></div>
+      <div class="card-body">
+        ${domains.length ? domains.map((d,i) => {
+          const info = ALL_DOMAINS.find(x=>x.key===d);
+          return info ? `<div style="display:flex;align-items:center;gap:8px;padding:4px 0;${i?'border-top:1px solid var(--border)':''}">
+            <span style="font-family:var(--font-m);font-size:10px;color:var(--od);min-width:20px;">#${i+1}</span>
+            <span style="font-size:14px;">${info.icon}</span>
+            <span style="font-family:var(--font-c);font-size:12px;letter-spacing:1px;">${info.name}</span>
+          </div>` : '';
+        }).join('') : '<div style="color:var(--muted);font-size:12px;">No domains configured. Go to Profile to set priorities.</div>'}
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header"><div class="card-title">RECENT SESSIONS</div></div>
+      <div class="card-body">
+        ${logs.length ? logs.slice(-5).reverse().map(l => `
+          <div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--border);">
+            <span style="font-family:var(--font-m);font-size:10px;color:var(--muted);min-width:70px;">${l.session_date||l.created_at?.split('T')[0]||''}</span>
+            <span class="day-tag ${l.session_type==='ruck'?'sfas':l.session_type==='run'?'pm':'eod'}" style="font-size:9px;">${l.session_type}</span>
+            <span style="font-family:var(--font-m);font-size:10px;flex:1;">${l.day_label||''}</span>
+            <span style="font-family:var(--font-m);font-size:10px;color:var(--od);">${l.duration_min?l.duration_min+'m':''}</span>
+          </div>`).join('') : '<div style="color:var(--muted);font-size:12px;">No sessions logged yet. Hit "Log Session" to start tracking.</div>'}
+      </div>
+    </div>
+  `;
+  $('panel-dashboard').innerHTML = html;
+}
+
+// ── WORKOUTS ─────────────────────────────────────────────────
+async function buildWorkouts() {
+  const p = ME;
+  const days = p.path === 'sfas' ? getSFASWorkoutDays(p) : getEODSFASWorkoutDays(p);
+  const checks = await dbGet('workout_checks', {profile_id: p.id});
+
+  let html = `
+    <div class="panel-title">${p.path==='sfas'?'SFAS TRAINING':'EOD + SFAS TRAINING'}</div>
+    <div class="panel-sub">${p.current_phase.toUpperCase()} PHASE · WEEK ${p.current_week}${p.path==='eod_sfas'?' · EOD PHASE '+p.eod_phase+' WEEK '+p.eod_week:''}</div>
+
+    <div class="week-bar">
+      ${[1,2,3,4].map(w => `<button class="week-btn ${w===p.current_week?'active':''}" onclick="switchWeek(${w})">${w===4?'WK 4 (DELOAD)':'WK '+w}</button>`).join('')}
+    </div>
+  `;
+
+  days.forEach((day, dayIdx) => {
+    const dayChecks = checks.filter(c =>
+      c.phase === p.current_phase && c.week === p.current_week && c.day_index === dayIdx
+    );
+    let totalEx = 0, checkedEx = 0;
+
+    let sectionsHtml = '';
+    day.sections.forEach(sec => {
+      sectionsHtml += `<div class="section-title">${sec.title}</div>`;
+      sec.exercises.forEach((ex, exIdx) => {
+        totalEx++;
+        const exKey = `${dayIdx}-${sec.title}-${exIdx}`;
+        const isChecked = dayChecks.some(c => c.exercise_key === exKey);
+        if (isChecked) checkedEx++;
+        const detailId = `exd-${dayIdx}-${exIdx}-${sec.title.replace(/\s/g,'')}`;
+
+        sectionsHtml += `
+          <div class="ex-block">
+            <div class="ex-header ${isChecked?'done':''}" onclick="toggleExDetail('${detailId}')">
+              <div class="ex-cb ${isChecked?'checked':''}" onclick="event.stopPropagation();toggleExCheck('${exKey}',${dayIdx},this)">✓</div>
+              <span class="ex-name">${ex.name}</span>
+              <span class="ex-meta">${ex.sets||''} ${ex.reps||''} ${ex.load||''}</span>
+            </div>
+            <div class="ex-detail" id="${detailId}">
+              ${ex.rest?`<div>Rest: ${ex.rest}</div>`:''}
+              ${ex.tempo?`<div>Tempo: ${ex.tempo}</div>`:''}
+              ${ex.cue?`<div class="ex-cue">${ex.cue}</div>`:''}
+            </div>
+          </div>`;
+      });
+    });
+
+    if (day.amrap) {
+      sectionsHtml += `
+        <div class="amrap-block">
+          <div class="amrap-title">${day.amrap.label}</div>
+          ${day.amrap.exercises.map(e => `<div class="amrap-item">· ${e.name} ${e.reps||''} ${e.load||''}</div>`).join('')}
+        </div>`;
+    }
+
+    const pct = totalEx > 0 ? Math.round(checkedEx/totalEx*100) : 0;
+
+    html += `
+      <div class="day-card">
+        <div class="day-header">
+          ${day.tags.map(t => `<span class="day-tag ${t}">${t.toUpperCase()}</span>`).join('')}
+          <span class="day-label">${day.day} — ${day.label}</span>
+          <span class="day-counter">${checkedEx}/${totalEx}</span>
+          <div class="day-progress"><div class="day-progress-fill" style="width:${pct}%"></div></div>
+        </div>
+        <div class="day-body">
+          ${day.note?`<div class="day-note">${day.note}</div>`:''}
+          ${sectionsHtml}
+        </div>
+      </div>`;
+  });
+
+  $('panel-workouts').innerHTML = html;
+}
+
+function toggleExDetail(id) {
+  const el = $(id);
+  if (el) el.classList.toggle('open');
+}
+
+async function toggleExCheck(exKey, dayIdx, cbEl) {
+  const isChecked = cbEl.classList.toggle('checked');
+  const header = cbEl.closest('.ex-header');
+  header.classList.toggle('done', isChecked);
+
+  if (isChecked) {
+    await dbUpsert('workout_checks', {
+      profile_id: ME.id, path: ME.path, phase: ME.current_phase,
+      week: ME.current_week, day_index: dayIdx, exercise_key: exKey, completed: true
+    }, ['profile_id','path','phase','week','day_index','exercise_key']);
+  } else {
+    const checks = await dbGet('workout_checks', {profile_id:ME.id, exercise_key:exKey, phase:ME.current_phase, week:ME.current_week, day_index:dayIdx});
+    if (checks.length) await dbDelete('workout_checks', checks[0].id);
+  }
+
+  // Update progress bar
+  const card = cbEl.closest('.day-card');
+  const allCbs = card.querySelectorAll('.ex-cb');
+  const checked = card.querySelectorAll('.ex-cb.checked');
+  const pct = allCbs.length ? Math.round(checked.length/allCbs.length*100) : 0;
+  card.querySelector('.day-progress-fill').style.width = pct+'%';
+  card.querySelector('.day-counter').textContent = checked.length+'/'+allCbs.length;
+}
+
+async function switchWeek(w) {
+  ME.current_week = w;
+  await dbUpdate('profiles', ME.id, {current_week: w});
+  buildWorkouts();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// SFAS-ONLY WORKOUT DATA
+// Phase-based with 4-week mesocycles
+// ═══════════════════════════════════════════════════════════════
+
+function getSFASWorkoutDays(p) {
+  const wk = p.current_week;
+  const phase = p.current_phase;
+  const bw = p.bodyweight || 180;
+  const isDeload = wk === 4;
+
+  // Load calculation helper
+  const L = (pct, lift) => {
+    const orm = p[lift+'_1rm'] || p[lift+'_1RM'];
+    return orm ? Math.round(orm * pct/100 / 5)*5 + '#' : pct+'%';
+  };
+
+  // ── BASE PHASE ──────────────────────────────────────────
+  if (phase === 'base') {
+    const sqVol = isDeload ? '3×8' : ['4×10','4×10','5×8','3×8'][wk-1];
+    const sqLoad = isDeload ? L(60,'squat') : [L(65,'squat'),L(67,'squat'),L(70,'squat'),L(60,'squat')][wk-1];
+    const dlVol = isDeload ? '3×8' : ['4×8','4×8','4×6','3×8'][wk-1];
+    const dlLoad = isDeload ? L(60,'deadlift') : [L(65,'deadlift'),L(67,'deadlift'),L(70,'deadlift'),L(60,'deadlift')][wk-1];
+    const bpVol = isDeload ? '3×8' : ['4×10','4×10','5×8','3×8'][wk-1];
+    const bpLoad = isDeload ? L(60,'bench') : [L(65,'bench'),L(67,'bench'),L(70,'bench'),L(60,'bench')][wk-1];
+    const opVol = isDeload ? '3×8' : ['4×8','4×8','5×6','3×8'][wk-1];
+    const opLoad = isDeload ? L(60,'press') : [L(60,'press'),L(62,'press'),L(65,'press'),L(60,'press')][wk-1];
+    const runMin = isDeload ? 25 : [30,35,40,25][wk-1];
+    const ruckMi = isDeload ? 4 : [4,5,5,4][wk-1];
+    const ruckLb = isDeload ? 30 : [30,30,35,30][wk-1];
+    const amrapMin = isDeload ? 8 : [10,12,14,8][wk-1];
+
+    return [
+      { day:'MON', label:'Lower Strength', tags:['sfas'],
+        sections:[
+          {title:'WARM-UP', exercises:[
+            {name:'Glute Bridge', sets:'2×15', cue:'Squeeze at top, 2-sec hold'},
+            {name:'Banded Lateral Walk', sets:'2×15', cue:'Stay low, knees out'},
+            {name:'Goblet Squat (slow)', sets:'2×10', cue:'3-sec negative, full depth'},
+          ]},
+          {title:'STRENGTH', exercises:[
+            {name:'Back Squat', sets:sqVol, load:sqLoad, rest:'2-3min', tempo:'2/0/1/1', cue:'Brace hard. Full depth. Drive through heels.'},
+            {name:'Romanian Deadlift', sets:dlVol, load:dlLoad, rest:'2min', tempo:'3/1/1/0', cue:'Hinge at hips. Hamstring stretch at bottom. Squeeze glutes at top.'},
+            {name:'Walking Lunge', sets:isDeload?'2×16alt':'3×20alt', rest:'90sec', cue:'Knee tracks over toe. Upright torso. Step far enough to feel the stretch.'},
+          ]},
+          {title:'COOL DOWN', exercises:[
+            {name:'Couch Stretch', sets:'60sec/side'}, {name:'Hamstring Stretch', sets:'60sec/side'},
+            {name:'Pigeon Pose', sets:'45sec/side'}, {name:'Supine Breathing', sets:'2min'},
+          ]},
+        ],
+        note: isDeload ? 'Deload week. Move well, reduce intensity. This is where you grow.' : null },
+
+      { day:'TUE', label:'Upper Strength', tags:['sfas'],
+        sections:[
+          {title:'WARM-UP', exercises:[
+            {name:'Banded Pull Apart', sets:'2×15'}, {name:'Scap Push-ups', sets:'2×12'},
+            {name:'Dead Hang', sets:'2×30sec', cue:'Active shoulders. Grip work.'},
+          ]},
+          {title:'STRENGTH', exercises:[
+            {name:'Bench Press', sets:bpVol, load:bpLoad, rest:'2-3min', tempo:'2/1/1/0', cue:'Retract scapulae. Controlled descent. Full lockout.'},
+            {name:'Bent Over Row', sets:isDeload?'3×8':'4×10', rest:'2min', cue:'45° torso. Pull to sternum. Squeeze shoulder blades.'},
+            {name:'Pull-ups', sets:isDeload?'3×max':'4×max', rest:'2min', cue:'Full hang to chin over bar. No kipping.'},
+            {name:'Strict Press', sets:opVol, load:opLoad, rest:'2min', cue:'Brace core. Press to full lockout. No leg drive.'},
+          ]},
+          {title:'COOL DOWN', exercises:[
+            {name:'Pec Stretch', sets:'60sec/side'}, {name:'Lat Stretch', sets:'60sec/side'},
+            {name:'Shoulder Cross-body', sets:'45sec/side'}, {name:'Box 5 Breathing', sets:'3min'},
+          ]},
+        ]},
+
+      { day:'WED', label:`Z2 Run — ${runMin}min`, tags:['sfas'],
+        sections:[
+          {title:'WARM-UP', exercises:[{name:'Run Warm-up (dynamic)', sets:'5min'}]},
+          {title:'RUN', exercises:[
+            {name:`Zone 2 Run`, sets:`${runMin}min`, cue:'Conversational pace. Nose breathing when possible. Build your aerobic engine — this is the foundation everything else sits on.'},
+          ]},
+          {title:'CORE CIRCUIT — 3 ROUNDS', exercises:[
+            {name:'Plank', sets:'60sec'}, {name:'Side Plank', sets:'45sec/side'},
+            {name:'Dead Bug', sets:'24alt', cue:'Opposite arm/leg. Slow and controlled. Low back stays flat.'},
+          ]},
+          {title:'COOL DOWN', exercises:[
+            {name:'Calf Stretch', sets:'45sec/side'}, {name:'Hip Flexor Stretch', sets:'60sec/side'},
+            {name:'Hamstring Stretch', sets:'45sec/side'},
+          ]},
+        ]},
+
+      { day:'THU', label:'Ruck + Strength', tags:['sfas'],
+        sections:[
+          {title:'WARM-UP', exercises:[
+            {name:'Ankle Rocks', sets:'2×10ea'}, {name:'Calf Raises', sets:'2×10'},
+            {name:'Banded Pull Apart', sets:'2×10'},
+          ]},
+          {title:'RUCK', exercises:[
+            {name:`Ruck March`, sets:`${ruckMi} miles`, load:`${ruckLb}#`, cue:'Focus on posture and pacing. Walk fast — do not shuffle. Arms swing naturally. This is your most important SFAS-specific training.'},
+          ]},
+          {title:'STRENGTH (POST-RUCK)', exercises:[
+            {name:'Trap Bar Deadlift', sets:isDeload?'3×5':'4×6', load:isDeload?L(65,'trap'):L(70,'trap'), rest:'3min', cue:'Simulate picking up heavy things when already tired. This is selection.'},
+            {name:'Farmer Carry', sets:isDeload?'2×100m':'3×200m', load:'2×70#', cue:'Grip hard. Walk tall. Shoulders packed.'},
+          ]},
+          {title:'COOL DOWN', exercises:[
+            {name:'Hip Flexor Stretch', sets:'60sec/side'}, {name:'Pigeon Pose', sets:'45sec/side'},
+            {name:'Calf Stretch', sets:'45sec/side'}, {name:'Dead Hang', sets:'3×30sec'},
+          ]},
+        ],
+        note: isDeload ? 'Reduced ruck. No time pressure. Technique and foot care only.' : null },
+
+      { day:'FRI', label:'Metcon + Team Prep', tags:['sfas'],
+        sections:[
+          {title:'WARM-UP', exercises:[
+            {name:'3min jog'}, {name:'Banded Shoulder Complex'},
+            {name:'World\'s Greatest Stretch', sets:'5ea'},
+          ]},
+          {title:'STRENGTH', exercises:[
+            {name:'DB/KB Clean & Jerk', sets:'4×4', rest:'2min', cue:'Explosive. Full extension. Catch solid.'},
+          ]},
+        ],
+        amrap: { label:`AMRAP ${amrapMin} MIN`, exercises:[
+          {name:'200m Run'}, {name:'12 KB Swing', load:'50#'},
+          {name:'12 Push-ups'}, {name:'12 Air Squats'},
+        ]},
+        note: isDeload ? 'Reduced metcon. Easy effort.' : 'Push the pace but stay technically sound. This builds work capacity under fatigue.' },
+
+      { day:'SAT', label:'Long Slow Distance (Optional)', tags:['sfas','rest'],
+        sections:[
+          {title:'ENDURANCE', exercises:[
+            {name:'Long Run or Ruck', sets:isDeload?'45min easy':'60-90min', cue:'Easy effort. Zone 1-2. Build time on feet. This is optional but powerful for selection prep.'},
+          ]},
+          {title:'COOL DOWN', exercises:[
+            {name:'Full body stretch', sets:'10-15min'},
+          ]},
+        ],
+        note: 'Optional. Listen to your body. If recovery is compromised, skip this and rest.' },
+    ];
+  }
+
+  // ── BUILD PHASE ─────────────────────────────────────────
+  if (phase === 'build') {
+    const sqVol = isDeload ? '3×5' : ['5×5','5×4','6×3','3×5'][wk-1];
+    const sqLoad = isDeload ? L(70,'squat') : [L(72,'squat'),L(75,'squat'),L(78,'squat'),L(70,'squat')][wk-1];
+    const dlVol = isDeload ? '3×5' : ['5×5','5×4','6×3','3×5'][wk-1];
+    const dlLoad = isDeload ? L(70,'deadlift') : [L(72,'deadlift'),L(75,'deadlift'),L(78,'deadlift'),L(70,'deadlift')][wk-1];
+    const bpVol = isDeload ? '3×5' : ['5×5','5×4','6×3','3×5'][wk-1];
+    const bpLoad = isDeload ? L(70,'bench') : [L(72,'bench'),L(75,'bench'),L(78,'bench'),L(70,'bench')][wk-1];
+    const runMin = isDeload ? 25 : [35,40,45,25][wk-1];
+    const ruckMi = isDeload ? 5 : [6,7,8,5][wk-1];
+    const ruckLb = isDeload ? 35 : [35,40,40,35][wk-1];
+
+    return [
+      { day:'MON', label:'Lower Strength', tags:['sfas'],
+        sections:[
+          {title:'WARM-UP', exercises:[
+            {name:'Glute Bridge', sets:'2×15'}, {name:'Banded Lateral Walk', sets:'2×15'},
+            {name:'World\'s Greatest Stretch', sets:'2×5ea'},
+          ]},
+          {title:'STRENGTH', exercises:[
+            {name:'Back Squat', sets:sqVol, load:sqLoad, rest:'3min', tempo:'2/x/1/1', cue:'Building strength now. Explode out of the hole.'},
+            {name:'Romanian Deadlift', sets:isDeload?'3×8':'4×8', rest:'2min'},
+            {name:'Bulgarian Split Squat', sets:isDeload?'2×10ea':'3×12ea', rest:'90sec', cue:'Single leg stability is critical for rucking and uneven terrain.'},
+          ]},
+          {title:'COOL DOWN', exercises:[
+            {name:'Couch Stretch', sets:'60sec/side'}, {name:'Hamstring Stretch', sets:'60sec/side'},
+            {name:'Pigeon Pose', sets:'45sec/side'},
+          ]},
+        ]},
+
+      { day:'TUE', label:'Upper Strength', tags:['sfas'],
+        sections:[
+          {title:'WARM-UP', exercises:[
+            {name:'Banded Pull Apart', sets:'2×15'}, {name:'Banded Face Pull', sets:'2×12'},
+            {name:'Scap Push-ups', sets:'2×10'}, {name:'Dead Hang', sets:'2×30sec'},
+          ]},
+          {title:'STRENGTH', exercises:[
+            {name:'Bench Press', sets:bpVol, load:bpLoad, rest:'3min', cue:'Heavier now. Controlled descent, explosive press.'},
+            {name:'Pendlay Row', sets:isDeload?'3×8':'5×8', rest:'2min', cue:'Dead stop on the floor each rep. No bounce.'},
+            {name:'Weighted Pull-ups', sets:isDeload?'3×max':'4×max', rest:'2min', cue:'Add weight if bodyweight is >12 reps.'},
+          ]},
+          {title:'COOL DOWN', exercises:[
+            {name:'Doorway Pec Stretch', sets:'60sec/side'}, {name:'Lat Stretch', sets:'60sec/side'},
+            {name:'Box 5 Breathing', sets:'3min'},
+          ]},
+        ]},
+
+      { day:'WED', label:`Z2 Run — ${runMin}min`, tags:['sfas'],
+        sections:[
+          {title:'RUN', exercises:[
+            {name:`Zone 2 Run`, sets:`${runMin}min`, cue:'Longer runs now. Same easy pace. Building aerobic capacity for sustained efforts.'},
+          ]},
+          {title:'CORE CIRCUIT — 3 ROUNDS', exercises:[
+            {name:'Plank', sets:'60sec'}, {name:'Side Plank', sets:'45sec/side'}, {name:'Dead Bug', sets:'24alt'},
+          ]},
+        ]},
+
+      { day:'THU', label:'Ruck + Strength', tags:['sfas'],
+        sections:[
+          {title:'RUCK', exercises:[
+            {name:`Ruck March`, sets:`${ruckMi} miles`, load:`${ruckLb}#`, cue:'Increasing distance and load. Track your time. Your pace should be improving week over week.'},
+          ]},
+          {title:'STRENGTH (POST-RUCK)', exercises:[
+            {name:'Trap Bar Deadlift', sets:dlVol, load:dlLoad, rest:'3min'},
+            {name:'Step Ups', sets:isDeload?'2×12ea':'4×14ea', rest:'2min'},
+            {name:'Farmer Carry', sets:isDeload?'2×100m':'3×200m', load:'2×70#'},
+          ]},
+        ]},
+
+      { day:'FRI', label:'Metcon + Work Capacity', tags:['sfas'],
+        sections:[
+          {title:'STRENGTH', exercises:[
+            {name:'Strict Press', sets:isDeload?'3×6':['5×5','5×4','6×3','3×6'][wk-1], load:isDeload?L(65,'press'):[L(72,'press'),L(75,'press'),L(78,'press'),L(65,'press')][wk-1], rest:'3min'},
+            {name:'Barbell Row', sets:isDeload?'3×8':'5×10', rest:'2min'},
+          ]},
+        ],
+        amrap: { label:`AMRAP ${isDeload?10:14} MIN`, exercises:[
+          {name:'200m Run'}, {name:'10 KB Swing', load:'50#'}, {name:'10 Push-ups'}, {name:'10 Air Squats'},
+        ]}},
+
+      { day:'SAT', label:'Long Slow Distance', tags:['sfas','rest'],
+        sections:[{title:'ENDURANCE', exercises:[
+          {name:'Long Run or Ruck', sets:isDeload?'45min':'60-90min', cue:'Easy effort. Optional but critical for building selection-level endurance.'},
+        ]}]},
+    ];
+  }
+
+  // ── PEAK PHASE ──────────────────────────────────────────
+  if (phase === 'peak') {
+    const isD = isDeload;
+    return [
+      { day:'MON', label:'Lower — Peak Strength', tags:['sfas'],
+        sections:[
+          {title:'WARM-UP', exercises:[{name:'Hip CAR', sets:'2×10'},{name:'Banded Good Morning', sets:'2×10'},{name:'Air Squat', sets:'2×10'}]},
+          {title:'STRENGTH', exercises:[
+            {name:'Back Squat', sets:isD?'3×5':['4×3','4×2','5×1','3×5'][wk-1], load:isD?L(65,'squat'):[L(80,'squat'),L(85,'squat'),L(90,'squat'),L(65,'squat')][wk-1], rest:'3-5min', cue:'Peak strength. Heavy singles and doubles. Perfect form only.'},
+            {name:'Trap Bar Deadlift', sets:isD?'3×5':['4×3','3×2','4×1','3×5'][wk-1], load:isD?L(65,'trap'):[L(80,'trap'),L(85,'trap'),L(90,'trap'),L(65,'trap')][wk-1], rest:'3-5min'},
+            {name:'Walking Lunge', sets:isD?'2×16':'3×20alt'},
+          ]},
+        ]},
+      { day:'TUE', label:'Upper — Peak Strength', tags:['sfas'],
+        sections:[
+          {title:'STRENGTH', exercises:[
+            {name:'Close Grip Bench', sets:isD?'3×5':['5×3','5×2','4×1','3×5'][wk-1], load:isD?L(65,'bench'):[L(78,'bench'),L(82,'bench'),L(88,'bench'),L(65,'bench')][wk-1], rest:'3min'},
+            {name:'Weighted Pull-ups', sets:isD?'3×max':['5×5','5×4','4×3','3×max'][wk-1], rest:'2-3min'},
+            {name:'Barbell Row', sets:isD?'3×8':'5×10', rest:'2min'},
+            {name:'Farmer Hold', sets:'5min accumulate', load:'2×70#'},
+          ]},
+        ]},
+      { day:'WED', label:'Z2 Run + Core', tags:['sfas'],
+        sections:[{title:'RUN', exercises:[{name:'Zone 2 Run', sets:isD?'25min':'40-50min'}]},
+          {title:'CORE', exercises:[{name:'Plank', sets:'60sec'},{name:'Side Plank', sets:'45sec/ea'},{name:'Dead Bug', sets:'24alt'}]}]},
+      { day:'THU', label:'Ruck + Heavy Carry', tags:['sfas'],
+        sections:[
+          {title:'RUCK', exercises:[{name:'Ruck March', sets:isD?'5mi':'8-10mi', load:isD?'35#':'45#', cue:'Peak ruck volume. This is where you prove you can handle selection distances.'}]},
+          {title:'STRENGTH', exercises:[
+            {name:'Sandbag Ground-to-Shoulder', sets:'5min AMRAP', load:'80#'},
+            {name:'Farmer Carry', sets:'4×200m', load:'2×70#'},
+          ]},
+        ]},
+      { day:'FRI', label:'Work Capacity', tags:['sfas'],
+        sections:[{title:'STRENGTH', exercises:[
+          {name:'Strict Press', sets:isD?'3×6':['5×4','5×3','4×2','3×6'][wk-1], load:isD?L(65,'press'):[L(75,'press'),L(80,'press'),L(85,'press'),L(65,'press')][wk-1], rest:'3min'},
+          {name:'Pendlay Row', sets:isD?'3×8':'5×8'},
+        ]}],
+        amrap:{label:`AMRAP ${isD?10:15} MIN`, exercises:[{name:'200m Run'},{name:'12 KB Swing',load:'53#'},{name:'12 Wallball',load:'20#'}]}},
+      { day:'SAT', label:'Long Ruck or LSD', tags:['sfas','rest'],
+        sections:[{title:'ENDURANCE', exercises:[{name:'Long Ruck', sets:isD?'5mi easy':'10-12mi', load:isD?'35#':'45-50#', cue:'Selection-distance rucks. Walk fast. Protect your feet. Track your time.'}]}]},
+    ];
+  }
+
+  // ── TAPER PHASE ─────────────────────────────────────────
+  if (phase === 'taper') {
+    return [
+      { day:'MON', label:'Lower — Maintain', tags:['sfas'],
+        sections:[{title:'STRENGTH', exercises:[
+          {name:'Back Squat', sets:'3×5', load:L(70,'squat'), rest:'2-3min', cue:'Maintain strength. Don\'t peak. Recover.'},
+          {name:'Trap Bar DL', sets:'3×5', load:L(70,'trap'), rest:'2-3min'},
+          {name:'Walking Lunge', sets:'2×16'},
+        ]}]},
+      { day:'TUE', label:'Upper — Maintain', tags:['sfas'],
+        sections:[{title:'STRENGTH', exercises:[
+          {name:'Bench Press', sets:'3×5', load:L(70,'bench'), rest:'2-3min'},
+          {name:'Pull-ups', sets:'3×max'},{name:'Barbell Row', sets:'3×8'},
+        ]}]},
+      { day:'WED', label:'Easy Run + Mobility', tags:['sfas','rest'],
+        sections:[{title:'RUN', exercises:[{name:'Easy Run', sets:'25-30min', cue:'Very easy. Active recovery. Stay loose.'}]},
+          {title:'MOBILITY', exercises:[{name:'Full body stretch routine', sets:'15-20min'}]}]},
+      { day:'THU', label:'Light Ruck', tags:['sfas'],
+        sections:[{title:'RUCK', exercises:[{name:'Ruck', sets:'6mi', load:'35#', cue:'Easy pace. Maintain but don\'t build. Protect your feet and joints.'}]},
+          {title:'LIGHT CARRY', exercises:[{name:'Farmer Carry', sets:'2×200m', load:'2×53#'}]}]},
+      { day:'FRI', label:'Light Metcon', tags:['sfas'],
+        sections:[{title:'LIGHT WORK', exercises:[{name:'Easy cardio', sets:'20min'},{name:'Bodyweight circuit', sets:'3 rounds'}]}],
+        note:'Taper phase. You\'ve done the work. Now recover, sleep 9+ hours, eat clean, and show up ready.'},
+      { day:'SAT', label:'Rest or Easy Walk', tags:['rest'],
+        sections:[{title:'RECOVERY', exercises:[{name:'Walk or light hike', sets:'30-45min', cue:'Optional. If you feel good, walk. If not, rest completely.'}]}]},
+    ];
+  }
+
+  return [];
+}
+
+// ═══════════════════════════════════════════════════════════════
+// EOD+SFAS COMBINED WORKOUT DATA
+// EOD phases as AM, SFAS supplemental as PM/weekends
+// ═══════════════════════════════════════════════════════════════
+
+function getEODSFASWorkoutDays(p) {
+  // Get base EOD days from phase data
+  const eodDays = getEODPhaseDays(p);
+  // Get SFAS supplemental
+  const sfasSup = getSFASSupplemental(p);
+
+  // Merge: EOD AM sessions + SFAS PM/weekend sessions
+  const merged = [];
+  eodDays.forEach((day, i) => {
+    merged.push(day);
+    // Add PM SFAS session on select days (Mon, Wed, Fri)
+    if (sfasSup[i]) {
+      merged.push(sfasSup[i]);
+    }
+  });
+  return merged;
+}
+
+function getEODPhaseDays(p) {
+  const phase = p.eod_phase;
+  const wk = p.eod_week;
+  const isDeload = wk === 4;
+  const L = (pct, lift) => {
+    const key = lift+'_1rm';
+    const orm = p[key];
+    return orm ? Math.round(orm*pct/100/5)*5+'#' : pct+'%';
+  };
+
+  // Phase 1 — Foundation / BW / TRX / KB
+  if (phase == 1) {
+    return [
+      { day:'MON', label:'Ruck + Chassis', tags:['eod'],
+        sections:[
+          {title:'WARM-UP', exercises:[{name:'2min Jog'},{name:'Ankle Circles', sets:'2×10ea'},{name:'Calf Raise', sets:'2×10'},{name:'Banded Pull Apart', sets:'2×10'},{name:'Scap Push-ups', sets:'2×10'}]},
+          {title:'RUCK CIRCUIT — 3 ROUNDS', exercises:[
+            {name:'1Km Ruck', load:'30#', cue:'Focus on posture and pace.'},
+            {name:'Pull-ups', sets:'10', cue:'Full ROM. Dead hang to chin over bar.'},
+            {name:'KB Press', sets:'10', load:'2×35#'},
+          ]},
+          {title:'CHASSIS', exercises:[{name:'High Plank', sets:'3×40sec'},{name:'Side Plank ea side', sets:'2×30sec'}]},
+          {title:'COOL DOWN', exercises:[{name:'Nasal Breathing Walk', sets:'3min'},{name:'90/90 Stretch', sets:'5 rounds/side'}]},
+        ]},
+      { day:'TUE', label:'Upper BW/TRX', tags:['eod'],
+        sections:[
+          {title:'WARM-UP', exercises:[{name:'3min easy jog'},{name:'Arm Circles', sets:'3rds×10ea dir'},{name:'Atomic Push-ups', sets:'5'}]},
+          {title:'OLYMPIC/POWER', exercises:[{name:'Ball Side Toss', sets:'3×3ea side', load:'20#'}]},
+          {title:'STRENGTH', exercises:[
+            {name:'TRX Row', sets:isDeload?'3×10':['4×10','4×12','5×12','3×10'][wk-1], rest:'1-2min', tempo:'1/1/1/1'},
+            {name:'Push-ups', sets:isDeload?'3×15':['4×15','4×15','4×20','3×15'][wk-1], rest:'1-2min', tempo:'1/1/1/1'},
+            {name:'Chin-ups', sets:isDeload?'3×max':['3×max','4×max','4×max','3×max'][wk-1]},
+            {name:isDeload?'Scap Pull-ups':'TRX I/T/Y', sets:isDeload?'3×8':'3×12'},
+          ]},
+          {title:'AEROBIC FLUSH', exercises:[{name:'10min easy Z1-2'}]},
+        ]},
+      { day:'WED', label:'Lower Run + KB', tags:['eod'],
+        sections:[
+          {title:'WARM-UP', exercises:[{name:'Run Warm-up Video'}]},
+          {title:'STRENGTH', exercises:[
+            {name:'Goblet Squat', sets:isDeload?'3×10':['4×10','4×12','5×10','3×10'][wk-1], rest:'1-2min', tempo:'1/1/1/1'},
+            {name:'KB RDL', sets:isDeload?'3×12':['3×12','4×12','4×15','3×12'][wk-1], rest:'1-2min', tempo:'1/x/2/1'},
+            {name:'Walking Lunges', sets:isDeload?'3×16alt':['3×16alt','3×18alt','3×20alt','3×16alt'][wk-1]},
+          ]},
+          {title:'RUN', exercises:[{name:'Z2 Run', sets:isDeload?'30min':['30min','35min','45min','30min'][wk-1]}]},
+        ]},
+      { day:'THU', label:'Upper + Metcon', tags:['eod'],
+        sections:[
+          {title:'WARM-UP', exercises:[{name:'3min jog'},{name:'TRX Squat Row', sets:'3rds×10'},{name:'Atomic Push-ups', sets:'5'}]},
+          {title:'STRENGTH', exercises:[
+            {name:'KB Strict Press', sets:isDeload?'3×8':['4×8','5×8','5×10','3×8'][wk-1], rest:'1-2min', tempo:'1/1/2/1'},
+            {name:'TRX Inverted Row', sets:isDeload?'3×10':['4×10','4×12','5×12','3×10'][wk-1], rest:'1-2min'},
+          ]},
+        ],
+        amrap:{label:`AMRAP ${isDeload?8:[10,12,14,8][wk-1]} MIN`, exercises:[
+          {name:'10 KB Swing'},{name:'10 Push-ups'},{name:'200m Run'},
+        ]}},
+      { day:'FRI', label:'Lower + Metcon', tags:['eod'],
+        sections:[
+          {title:'WARM-UP', exercises:[{name:'3min jog'},{name:'Lunge w/ Rotation', sets:'5ea'},{name:'Bar Taps', sets:'1min accumulate'}]},
+          {title:'COUNTER-ROTATION', exercises:[{name:'Paloff Press', sets:isDeload?'2×8ea':['2×8ea','2×10ea','3×8ea','2×8ea'][wk-1], tempo:'1/1/1/1'}]},
+          {title:'STRENGTH', exercises:[
+            {name:'Step Ups (vest)', sets:isDeload?'3×20alt':['3×20alt','4×20alt','4×24alt','3×20alt'][wk-1]},
+            {name:'Front Rack KB Carry', sets:isDeload?'3×30m':['3×40m','4×40m','4×50m','3×30m'][wk-1]},
+          ]},
+        ],
+        amrap:{label:`AMRAP ${isDeload?10:[12,12,15,10][wk-1]} MIN`, exercises:[
+          {name:'200m Run'},{name:'10 Air Squat'},{name:'10 TTB'},
+        ]}},
+      { day:'SAT', label:'Optional LSD', tags:['eod','rest'],
+        sections:[{title:'ENDURANCE', exercises:[{name:'Long Run', sets:'60-90min', cue:'Optional. Easy effort. Build time on feet.'}]}]},
+    ];
+  }
+
+  // Phases 2-6: Simplified versions (key lifts + structure)
+  // Phase 2 — Barbell Introduction
+  if (phase == 2) {
+    return [
+      { day:'MON', label:'Lower Lift Only', tags:['eod'],
+        sections:[
+          {title:'WARM-UP', exercises:[{name:'Glute Bridge', sets:'2×15'},{name:'Banded Lateral Walk', sets:'2×15'},{name:'World\'s Greatest Stretch', sets:'2×5ea'}]},
+          {title:'OLYMPIC/POWER', exercises:[{name:'Banded Rotation Lift', sets:'4×5ea', rest:'1-2min'}]},
+          {title:'STRENGTH', exercises:[
+            {name:'Back Squat', sets:isDeload?'3×5':['5×5','5×5','5×4','3×5'][wk-1], load:isDeload?L(70,'squat'):[L(70,'squat'),L(73,'squat'),L(78,'squat'),L(70,'squat')][wk-1], rest:'3min', tempo:'2/x/1/1'},
+            {name:'Romanian Deadlift', sets:isDeload?'3×8':['3×8','4×10','4×6','3×8'][wk-1], rest:'2min'},
+            {name:'Walking Lunge', sets:isDeload?'3×16alt':['3×16alt','3×18alt','3×20alt','3×16alt'][wk-1]},
+          ]},
+        ]},
+      { day:'TUE', label:'Upper Lift Only', tags:['eod'],
+        sections:[
+          {title:'WARM-UP', exercises:[{name:'Banded Pull Apart', sets:'2×15'},{name:'Banded Face Pull', sets:'2×12'},{name:'Scap Push-ups', sets:'2×10'},{name:'Dead Hang', sets:'2×30sec'}]},
+          {title:'STRENGTH', exercises:[
+            {name:'Bench Press', sets:isDeload?'3×5':['5×5','5×5','5×4','3×5'][wk-1], load:isDeload?L(70,'bench'):[L(70,'bench'),L(73,'bench'),L(78,'bench'),L(70,'bench')][wk-1], rest:'3min'},
+            {name:'Bent Over Row', sets:isDeload?'3×8':['4×8','4×10','5×8','3×8'][wk-1], rest:'2min'},
+            {name:'Pull-ups', sets:isDeload?'3×max':['3×max','4×max','4×max','3×max'][wk-1]},
+          ]},
+        ]},
+      { day:'WED', label:'Ruck + Split Focus', tags:['eod'],
+        sections:[
+          {title:'WARM-UP', exercises:[{name:'Banded Strict Press', sets:'2×12'},{name:'KB Halo', sets:'2×8ea'},{name:'Scap Pull-ups', sets:'2×6'}]},
+          {title:'RUCK CIRCUIT', exercises:[
+            {name:'1Km Ruck × 3 Rounds', load:'35#', sets:isDeload?'32:00 Cap':['35:00 Cap','35:00 Cap','33:00 Cap','32:00 Cap'][wk-1]},
+            {name:'Pull-ups', sets:'10/round'},{name:'OHP', sets:'10/round', load:'95#'},
+          ]},
+        ]},
+      { day:'THU', label:'Split Focus — Lower', tags:['eod'],
+        sections:[
+          {title:'WARM-UP', exercises:[{name:'KB Deadlift', sets:'2×12'},{name:'Hip Airplanes', sets:'2×5ea'},{name:'Banded Hamstring Pull', sets:'2×10'}]},
+          {title:'OLYMPIC/POWER', exercises:[{name:'Farmer Carry', sets:isDeload?'2×60m':['2×60m','3×60m','2×100m','2×60m'][wk-1], load:'2×70#'}]},
+          {title:'STRENGTH', exercises:[
+            {name:'Trap Bar Deadlift', sets:isDeload?'3×5':['4×5','4×6','5×4','3×5'][wk-1], rest:'3min'},
+            {name:'Step Ups', sets:isDeload?'2×24alt':['3×24alt','3×24alt','4×28alt','2×24alt'][wk-1]},
+          ]},
+        ],
+        amrap:{label:`AMRAP ${isDeload?10:[10,12,14,10][wk-1]} MIN`, exercises:[
+          {name:'200m Run'},{name:'10 KB Swing', load:'50#'},{name:'10 Air Squat'},
+        ]}},
+      { day:'FRI', label:'Split Focus — Upper', tags:['eod'],
+        sections:[
+          {title:'WARM-UP', exercises:[{name:'Banded External Rotation', sets:'2×12'},{name:'Wall Slides', sets:'2×10'},{name:'Shoulder Taps', sets:'2×10ea'}]},
+          {title:'STRENGTH', exercises:[
+            {name:'Strict Press', sets:isDeload?'3×6':['4×6','5×6','5×5','3×6'][wk-1], rest:'3min'},
+            {name:'Pendlay Row', sets:isDeload?'3×8':['4×8','4×10','5×8','3×8'][wk-1]},
+          ]},
+        ],
+        amrap:{label:`AMRAP ${isDeload?10:[10,12,14,10][wk-1]} MIN`, exercises:[
+          {name:'10 Push-ups'},{name:'10 DB Snatch'},{name:'10 Cal Row'},
+        ]}},
+    ];
+  }
+
+  // Phases 3-6: Similar structure with progressive overload
+  // Using phase 3 as template for remaining phases
+  const phaseLoads = {
+    3: {sq:[72,75,78,65], bp:[72,75,78,65], dl:[72,75,78,65], pr:[72,75,78,65]},
+    34: {sq:[70,70,70,70], bp:[70,70,70,70], dl:[70,70,70,70], pr:[70,70,70,70]},
+    4: {sq:[67,72,75,65], bp:[70,70,70,70], dl:[70,72,75,70], pr:[70,70,72,65]},
+    6: {sq:[75,80,60,0], bp:[75,80,60,0], dl:[75,80,60,0], pr:[0,0,0,0]},
+  };
+
+  const loads = phaseLoads[phase] || phaseLoads[3];
+  const sqP = isDeload ? 65 : (loads.sq[wk-1]||70);
+  const bpP = isDeload ? 65 : (loads.bp[wk-1]||70);
+  const dlP = isDeload ? 65 : (loads.dl[wk-1]||70);
+
+  return [
+    { day:'MON', label:`P${phase} Lower`, tags:['eod'],
+      sections:[{title:'STRENGTH', exercises:[
+        {name:'Back Squat', sets:isDeload?'3×5':'5×'+(wk<3?5:wk<4?4:3), load:L(sqP,'squat'), rest:'3min'},
+        {name:'RDL', sets:isDeload?'3×8':'4×'+(wk<3?8:10), rest:'2min'},
+        {name:'Walking Lunge', sets:isDeload?'3×16':'3×20alt'},
+      ]}]},
+    { day:'TUE', label:`P${phase} Upper`, tags:['eod'],
+      sections:[{title:'STRENGTH', exercises:[
+        {name:'Bench Press', sets:isDeload?'3×5':'5×'+(wk<3?5:wk<4?4:3), load:L(bpP,'bench'), rest:'3min'},
+        {name:'Pendlay Row', sets:isDeload?'3×8':'5×8', rest:'2min'},
+        {name:'Pull-ups', sets:isDeload?'3×max':'4-5×max'},
+      ]}]},
+    { day:'WED', label:`P${phase} Ruck/Run`, tags:['eod'],
+      sections:[{title:'RUCK/RUN', exercises:[
+        {name:phase>=4?'Ruck':'Z2 Run', sets:phase>=4?`4rds: 1.2K Ruck @ ${phase>=4?'45':'40'}#`:'40min Z2'},
+      ]}]},
+    { day:'THU', label:`P${phase} Lower + Metcon`, tags:['eod'],
+      sections:[{title:'STRENGTH', exercises:[
+        {name:'Trap Bar DL', sets:isDeload?'3×5':'4-5×'+(wk<3?5:wk<4?4:3), load:L(dlP,'trap'), rest:'3min'},
+        {name:'Step Ups', sets:isDeload?'2×12ea':'3-4×14ea'},
+      ]}],
+      amrap:{label:`AMRAP ${isDeload?10:12} MIN`, exercises:[{name:'200m Run'},{name:'10 KB Swing'},{name:'10 Air Squat'}]}},
+    { day:'FRI', label:`P${phase} Upper + Metcon`, tags:['eod'],
+      sections:[{title:'STRENGTH', exercises:[
+        {name:'Strict Press', sets:isDeload?'3×6':'5×'+(wk<3?5:6), rest:'3min'},
+        {name:'BB Row', sets:isDeload?'3×8':'5×10'},
+      ]}],
+      amrap:{label:`AMRAP ${isDeload?10:14} MIN`, exercises:[{name:'12 Push-ups'},{name:'12 DB Snatch'},{name:'12 Cal Row'}]}},
+  ];
+}
+
+function getSFASSupplemental(p) {
+  const phase = p.current_phase;
+  const wk = p.current_week;
+  const isDeload = wk === 4;
+  const ruckMi = isDeload ? 4 : {base:[4,5,5,4],build:[6,7,8,5],peak:[8,10,10,6],taper:[5,5,5,4]}[phase]?.[wk-1] || 5;
+  const ruckLb = isDeload ? 30 : {base:30,build:35,peak:45,taper:35}[phase] || 35;
+
+  // PM sessions for Mon/Wed/Fri + Saturday standalone
+  return [
+    // After MON EOD: PM Ruck technique + grip
+    { day:'MON PM', label:'SFAS — Grip & Carry', tags:['sfas','pm'],
+      sections:[{title:'PM SUPPLEMENTAL (30min)', exercises:[
+        {name:'Farmer Carry', sets:isDeload?'2×100m':'3×200m', load:'2×70#', cue:'This is recovery-compatible. Don\'t redline.'},
+        {name:'Dead Hang', sets:'3×max', cue:'Grip endurance. Essential for rucking and carries.'},
+        {name:'Band Pull-apart', sets:'3×20', cue:'Shoulder health. Do these daily.'},
+      ]}],
+      note:'PM session. Keep intensity low. This supplements, never competes with, your EOD morning session.' },
+    null, // TUE — no PM
+    // After WED EOD: PM swim or land nav study
+    { day:'WED PM', label:'SFAS — Swim/Nav Study', tags:['sfas','pm'],
+      sections:[{title:'PM SUPPLEMENTAL (30-45min)', exercises:[
+        {name:'Swim — Easy Laps', sets:'20-30min', cue:'Sub-threshold. Technique focus. If no pool access, do land nav study instead.'},
+        {name:'OR: Land Nav Study', sets:'30min', cue:'Map reading, compass work, pace count practice. Cognitive work only.'},
+      ]}]},
+    null, // THU — no PM
+    // After FRI EOD: PM chin-up GTG protocol
+    { day:'FRI PM', label:'SFAS — Pull Strength', tags:['sfas','pm'],
+      sections:[{title:'PM SUPPLEMENTAL (20min)', exercises:[
+        {name:'GTG Chin-ups', sets:'5 sets throughout the day', reps:isDeload?'3/set':'5/set', cue:'Grease the Groove. Never go to failure. Stop 2 reps short. Do sets spread across the day.'},
+        {name:'Push-ups', sets:'3×20', cue:'Maintain pressing endurance. Easy effort.'},
+      ]}]},
+    // SATURDAY: Standalone SFAS ruck
+    { day:'SAT', label:'SFAS — Long Ruck', tags:['sfas'],
+      sections:[{title:'STANDALONE SFAS SESSION', exercises:[
+        {name:'Long Ruck', sets:`${ruckMi} miles`, load:`${ruckLb}#`, cue:'This is your most important SFAS-specific training of the week. Track your time. Walk fast — do not shuffle.'},
+      ]},
+      {title:'POST-RUCK', exercises:[
+        {name:'Foot care + stretching', sets:'15min'},
+        {name:'Log: distance, load, time, weather, foot condition'},
+      ]}],
+      note:'Saturday long ruck is the keystone of your SFAS prep. Prioritize this over everything except sleep.' },
+  ];
+}
+
+
+// ── DOMAINS PANEL ────────────────────────────────────────────
+function buildDomains() {
+  let domains;
+  try { domains = JSON.parse(ME.domain_priorities || '[]'); } catch(e) { domains = []; }
+
+  const domainContent = {
+    ruck: { icon:'⬡', title:'RUCK PROGRESSION', desc:'Progressive overload for load carriage — the most critical SFAS skill.',
+      content: `<div class="intel-box">Your ruck progression is tracked in the Ruck Program panel. Key principle: increase distance OR load each week, never both at once. Deload every 4th week.</div>` },
+    strength: { icon:'▣', title:'STRENGTH TRAINING', desc:'Relative strength — your strength-to-bodyweight ratio matters more than absolute numbers.',
+      content: `<div class="intel-box">Focus lifts: Deadlift, Squat, Press, Pull-ups. Your workout programming handles the periodization. Log your 1RMs in Test Results to track progress.</div>` },
+    run: { icon:'◇', title:'RUN ENDURANCE', desc:'Aerobic base through Z2 work, supplemented with tempo and interval sessions in build/peak phases.',
+      content: `<div class="intel-box">Zone 2 is the foundation. You should be able to hold a conversation. If you can't talk, slow down. Build to 45-50min Z2 runs before adding intensity.</div>` },
+    swim: { icon:'≋', title:'SWIM / WATER CONFIDENCE', desc:'Water survival and confidence. Not speed — composure.',
+      content: `<div class="intel-box amber">Three phases: (1) Comfort — float, tread water, stay calm. (2) Technique — basic strokes, breathing rhythm. (3) Endurance — sustained swimming without panic. Candidates who panic, fail.</div>` },
+    landnav: { icon:'◎', title:'LAND NAVIGATION', desc:'Map, compass, pace count. No GPS at SFAS. This is a learnable skill that compounds with study.',
+      content: `
+      <div class="intel-box red">SFAS standard: 5 points in 4 hours across 10km+ of loaded terrain, day AND night. You will navigate with a 1:50,000 topo map and a lensatic compass. No GPS. No phone. No trails.</div>
+
+      <div style="margin-top:14px;"><div class="section-title">GEAR CHECKLIST</div>
+      <div style="font-size:12px;display:grid;grid-template-columns:1fr 1fr;gap:4px 16px;">
+        <div>☐ Lensatic compass (Cammenga 3H)</div><div>☐ Map protractor (military GTA)</div>
+        <div>☐ 1:50,000 topo map (local area)</div><div>☐ Pace count beads (ranger beads)</div>
+        <div>☐ Red lens headlamp</div><div>☐ Mechanical pencil + notecard</div>
+        <div>☐ Protractor with roamer scale</div><div>☐ Map case / gallon ziplock</div>
+      </div></div>
+
+      <div style="margin-top:14px;"><div class="section-title">WEEK-BY-WEEK CURRICULUM</div>
+      <div class="card" style="margin:8px 0;"><div class="card-header"><div class="card-title">WEEKS 1-3: MAP FUNDAMENTALS</div></div><div class="card-body" style="font-size:12px;line-height:1.6;">
+        <div style="margin-bottom:6px;"><strong style="color:var(--od2);">Week 1:</strong> Learn the 5 major terrain features (hill, valley, ridge, saddle, depression) and the 3 minor features (draw, spur, cliff). Study contour lines until you can visualize terrain from paper. Practice with real topo maps.</div>
+        <div style="margin-bottom:6px;"><strong style="color:var(--od2);">Week 2:</strong> Marginal data — understand scale (1:50,000 means 1cm = 500m), grid north vs magnetic north, declination diagram, legend symbols. Learn to read the map border like a reference manual.</div>
+        <div style="margin-bottom:6px;"><strong style="color:var(--od2);">Week 3:</strong> MGRS coordinates — practice giving 6-digit (100m accuracy) and 8-digit (10m accuracy) grid coordinates until you can do it in under 30 seconds. Read right then up. Use your protractor roamer.</div>
+        <div class="intel-box" style="margin-top:8px;">SELF-TEST: Pick 10 random points on a topo map. Give the 8-digit MGRS for each in under 5 minutes. Score yourself. Repeat until 100%.</div>
+      </div></div>
+
+      <div class="card" style="margin:8px 0;"><div class="card-header"><div class="card-title">WEEKS 4-6: COMPASS WORK</div></div><div class="card-body" style="font-size:12px;line-height:1.6;">
+        <div style="margin-bottom:6px;"><strong style="color:var(--od2);">Week 4:</strong> Declination adjustment — learn to convert between grid azimuth and magnetic azimuth. Get this wrong and every bearing you shoot is wrong. Practice: Grid + G-M angle = Magnetic (west declination, add; east, subtract). Mnemonic: "GM Less, MG Greater" for west declination areas.</div>
+        <div style="margin-bottom:6px;"><strong style="color:var(--od2);">Week 5:</strong> Shoot azimuths with compass-to-cheek technique. Practice shooting to known objects and verifying on your map. Compute back-azimuths (add/subtract 180°) in your head in under 5 seconds.</div>
+        <div style="margin-bottom:6px;"><strong style="color:var(--od2);">Week 6:</strong> Intersection (find a point from two known positions) and Resection (find YOUR position from two known features). These are critical survival skills. Practice on paper, then in the field.</div>
+        <div class="intel-box" style="margin-top:8px;">SELF-TEST: Stand at a known point. Shoot azimuths to 5 landmarks. Plot them on your map. Are they within 100m of the actual feature? If not, your technique needs work.</div>
+      </div></div>
+
+      <div class="card" style="margin:8px 0;"><div class="card-header"><div class="card-title">WEEKS 5-8: PACE COUNT</div></div><div class="card-body" style="font-size:12px;line-height:1.6;">
+        <div style="margin-bottom:6px;"><strong style="color:var(--od2);">Week 5-6:</strong> Measure your pace count on flat terrain with a known 100m distance. Do it loaded (with ruck) and unloaded. Know both numbers. Typical loaded pace count: 62-68 paces per 100m.</div>
+        <div style="margin-bottom:6px;"><strong style="color:var(--od2);">Week 7:</strong> Measure pace count on uphill, downhill, and cross-slope terrain. Uphill adds ~10%, downhill can vary. Know your adjustments.</div>
+        <div style="margin-bottom:6px;"><strong style="color:var(--od2);">Week 8:</strong> Practice pace counting while simultaneously maintaining a compass bearing. This is the real skill — doing two cognitive tasks at once while fatigued. Use ranger beads to track hundreds of meters.</div>
+        <div class="intel-box" style="margin-top:8px;">DRILL: Set a 1km course with a known start and end point. Navigate it using only compass bearing and pace count. Were you within 50m of the target? Repeat until consistent.</div>
+      </div></div>
+
+      <div class="card" style="margin:8px 0;"><div class="card-header"><div class="card-title">WEEKS 8-14: FIELD EXERCISES</div></div><div class="card-body" style="font-size:12px;line-height:1.6;">
+        <div style="margin-bottom:6px;"><strong style="color:var(--od2);">Exercise 1:</strong> 3-point course on local terrain. Plot 3 points on your map, plan your routes, execute with compass and pace count only. Time yourself. Target: all 3 points in 2 hours.</div>
+        <div style="margin-bottom:6px;"><strong style="color:var(--od2);">Exercise 2:</strong> Night navigation — same area, after dark with red lens headlamp only. Night nav is a completely separate skill. You will navigate at night during SFAS. Start with short legs (500m).</div>
+        <div style="margin-bottom:6px;"><strong style="color:var(--od2);">Exercise 3:</strong> Fatigued navigation — do a hard ruck, then immediately navigate a 2-point course. Fatigue degrades your cognitive function significantly. Train for it.</div>
+        <div style="margin-bottom:6px;"><strong style="color:var(--od2);">Exercise 4:</strong> Full SFAS simulation — plan a 5-point course on a real topo map covering 10km+. Execute day and night. Target: 5 points in 4 hours. This is selection standard.</div>
+        <div class="intel-box red" style="margin-top:8px;">The #1 reason candidates fail land nav at SFAS is not knowing how to execute resection under stress. If you cannot locate yourself on the map at any given moment, you are lost. Practice resection until it is automatic.</div>
+      </div></div></div>
+
+      <div style="margin-top:14px;"><div class="section-title">SELF-TESTS & QUIZZES</div>
+      <div style="font-size:12px;line-height:1.8;">
+        <div>☐ Convert 10 grid azimuths to magnetic azimuths in under 2 minutes</div>
+        <div>☐ Plot 10 MGRS 8-digit coordinates on a map in under 5 minutes</div>
+        <div>☐ Compute 10 back-azimuths mentally in under 60 seconds</div>
+        <div>☐ Perform a resection from 3 known points — plot your position within 100m</div>
+        <div>☐ Navigate a 1km leg by compass and pace count — arrive within 50m of target</div>
+        <div>☐ Execute a 3-point day course in under 2 hours</div>
+        <div>☐ Execute a 2-point night course in under 90 minutes</div>
+        <div>☐ Navigate immediately after a 4-mile ruck — still hit your points</div>
+      </div></div>
+
+      <div style="margin-top:14px;"><div class="section-title">RECOMMENDED RESOURCES</div>
+      <div style="font-size:12px;line-height:1.8;">
+        <div><strong style="color:var(--tan);">Book:</strong> "Be Expert with Map and Compass" — Bjorn Kjellstrom. The gold standard. Read cover to cover.</div>
+        <div><strong style="color:var(--tan);">Manual:</strong> FM 3-25.26 (Map Reading and Land Navigation). Free PDF from Army publishing.</div>
+        <div><strong style="color:var(--tan);">YouTube:</strong> "Land Navigation" by Black Scout Survival — excellent field demonstrations.</div>
+        <div><strong style="color:var(--tan);">YouTube:</strong> "Compass and Pace Count" by Corporal's Corner — step-by-step technique videos.</div>
+        <div><strong style="color:var(--tan);">App:</strong> MGRS Mapper (iOS/Android) — practice plotting grids. Do NOT use during field exercises.</div>
+        <div><strong style="color:var(--tan);">Practice Maps:</strong> Order 1:50,000 USGS topo maps of your local area from the USGS store or use CalTopo.com to print custom maps.</div>
+      </div></div>
+      ` },
+    mental: { icon:'◈', title:'MENTAL CONDITIONING', desc:'Selection is a mental event. Physical fitness is the price of admission. Mental durability is what gets you selected.',
+      content: `
+      <div class="intel-box red">At SFAS, everyone is fit. The difference between selected and non-selected is almost entirely mental. You must train your mind the same way you train your body — progressively, consistently, and under stress.</div>
+
+      <div style="margin-top:14px;"><div class="section-title">STRUCTURED CONDITIONING DRILLS</div>
+      <div class="card" style="margin:8px 0;"><div class="card-header"><div class="card-title">COLD EXPOSURE PROTOCOL</div></div><div class="card-body" style="font-size:12px;line-height:1.6;">
+        <div style="margin-bottom:6px;"><strong style="color:var(--od2);">Week 1-2:</strong> End every shower with 30 seconds of cold water. Focus on controlling your breathing — slow inhale through the nose, slow exhale through the mouth. Do not gasp. Do not flinch.</div>
+        <div style="margin-bottom:6px;"><strong style="color:var(--od2);">Week 3-4:</strong> Extend to 60 seconds. Practice box breathing (4 count in, 4 hold, 4 out, 4 hold) while under the cold water.</div>
+        <div style="margin-bottom:6px;"><strong style="color:var(--od2);">Week 5+:</strong> Extend to 2-3 minutes. The goal is not to enjoy it — it is to remain calm and functional when your body is screaming at you to quit. This is exactly what selection feels like.</div>
+        <div class="intel-box" style="margin-top:8px;">The point is not the cold. The point is practicing voluntary discomfort with controlled breathing. This transfers directly to every hard moment at SFAS.</div>
+      </div></div>
+
+      <div class="card" style="margin:8px 0;"><div class="card-header"><div class="card-title">TIME UNDER TENSION DRILLS</div></div><div class="card-body" style="font-size:12px;line-height:1.6;">
+        <div style="margin-bottom:6px;"><strong style="color:var(--od2);">Wall Sit Challenge:</strong> Hold a wall sit for as long as possible. When the burn starts, that is where the training begins. Your only job is to not stand up. Track your time weekly.</div>
+        <div style="margin-bottom:6px;"><strong style="color:var(--od2);">Plank Hold:</strong> Max plank for time. When your body starts shaking, tell yourself "one more minute." Then hold one more minute after that.</div>
+        <div style="margin-bottom:6px;"><strong style="color:var(--od2);">Ruck Sandbag Hold:</strong> Hold an 80# sandbag bear-hugged to your chest. Stand still. Do not put it down until time is called. Start at 5 minutes. Build to 10+.</div>
+        <div style="margin-bottom:6px;"><strong style="color:var(--od2);">Overhead Hold:</strong> Hold a 45# plate overhead, arms locked out. When it gets heavy, breathe. Do not lower it. Start at 2 minutes.</div>
+      </div></div></div>
+
+      <div style="margin-top:14px;"><div class="section-title">STRESS INOCULATION WORKOUTS</div>
+      <div style="font-size:12px;line-height:1.6;">
+        <div class="card" style="margin:8px 0;"><div class="card-body" style="font-size:12px;">
+          <div style="font-family:var(--font-c);font-weight:700;color:var(--red2);margin-bottom:6px;">WORKOUT 1: "EMBRACE THE SUCK"</div>
+          <div>Do your normal strength session. Immediately after, with no rest: 1-mile run at tempo pace, then 50 burpees for time. Log your time. The goal is performing cognitively and physically when you are already spent.</div>
+        </div></div>
+        <div class="card" style="margin:8px 0;"><div class="card-body" style="font-size:12px;">
+          <div style="font-family:var(--font-c);font-weight:700;color:var(--red2);margin-bottom:6px;">WORKOUT 2: "UNKNOWN DISTANCE"</div>
+          <div>Have a training partner set a ruck distance and route without telling you. You do not know how far you are going or when it ends. This trains you to operate without knowing the timeline — exactly like SFAS events. Just keep moving.</div>
+        </div></div>
+        <div class="card" style="margin:8px 0;"><div class="card-body" style="font-size:12px;">
+          <div style="font-family:var(--font-c);font-weight:700;color:var(--red2);margin-bottom:6px;">WORKOUT 3: "SLEEP DEFICIT SESSION"</div>
+          <div>Once every 2 weeks: set your alarm 2 hours earlier than normal. Get up and immediately do a full training session. You will feel terrible. That is the point. You will operate sleep-deprived at SFAS. Practice it.</div>
+        </div></div>
+        <div class="card" style="margin:8px 0;"><div class="card-body" style="font-size:12px;">
+          <div style="font-family:var(--font-c);font-weight:700;color:var(--red2);margin-bottom:6px;">WORKOUT 4: "WET AND COLD"</div>
+          <div>Soak your clothes in cold water. Put them on. Go ruck 3 miles. You will be uncomfortable the entire time. Control your breathing. Keep your pace. This simulates what many SFAS events feel like after water crossings.</div>
+        </div></div>
+      </div></div>
+
+      <div style="margin-top:14px;"><div class="section-title">WEEKLY TEAM CHALLENGES</div>
+      <div style="font-size:12px;line-height:1.6;">
+        <div style="padding:6px 0;border-bottom:1px solid var(--border);"><strong style="color:var(--amber);">Challenge 1:</strong> Max wall sit — everyone does it on the same day. Post your time in team comms. Lowest time buys coffee.</div>
+        <div style="padding:6px 0;border-bottom:1px solid var(--border);"><strong style="color:var(--amber);">Challenge 2:</strong> "Mystery AMRAP" — one team member programs a 10-minute AMRAP and sends it at 0500. Everyone does it that day. Compare scores.</div>
+        <div style="padding:6px 0;border-bottom:1px solid var(--border);"><strong style="color:var(--amber);">Challenge 3:</strong> Cold shower streak — who can go the longest with 2+ minutes of cold water every single day? Track consecutive days.</div>
+        <div style="padding:6px 0;border-bottom:1px solid var(--border);"><strong style="color:var(--amber);">Challenge 4:</strong> "No quit" ruck — team picks a distance (6-10mi). Everyone does it on Saturday. Nobody walks slower than 15min/mile. Anyone who finishes carries the slowest person's ruck for 400m as a team penalty/reward.</div>
+        <div style="padding:6px 0;"><strong style="color:var(--amber);">Challenge 5:</strong> Land nav race — same 3-point course, same map. Who finds all 3 points fastest? Losers do 50 burpees.</div>
+      </div></div>
+      ` },
+    nutrition: { icon:'◆', title:'NUTRITION & FUELING', desc:'You cannot out-train a bad diet. Fuel the mission.',
+      content: `<div class="intel-box">See the Nutrition panel for full meal plans. Key numbers: 1g protein per lb bodyweight, 3,000-3,500 cal on heavy days, 2,400-2,600 on rest days. Hydrate aggressively — 1 gallon minimum daily.</div>` },
+    team: { icon:'◫', title:'TEAM EVENTS / BUDDY WORK', desc:'Selection requires teamwork under load. You cannot be a solo operator.',
+      content: `<div class="intel-box">Practice: buddy carries (fireman, drag, piggyback), log PT simulation, sandbag relays, team rucks. If you have training partners, do these weekly. If solo, simulate with heavy sandbag work and carries.</div>` },
+  };
+
+  let html = `<div class="panel-title">TRAINING DOMAINS</div><div class="panel-sub">YOUR PRIORITIZED FOCUS AREAS</div>`;
+  domains.forEach((key, i) => {
+    const d = domainContent[key];
+    if (!d) return;
+    html += `
+      <div class="skill-card">
+        <div class="skill-header" onclick="this.nextElementSibling.classList.toggle('open')">
+          <span class="skill-icon">${d.icon}</span>
+          <span class="skill-title">${d.title}</span>
+          <span class="skill-badge">#${i+1} PRIORITY</span>
+        </div>
+        <div class="skill-body">
+          <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">${d.desc}</div>
+          ${d.content}
+        </div>
+      </div>`;
+  });
+  $('panel-domains').innerHTML = html;
+}
+
+// ── RUCK PROGRAM ─────────────────────────────────────────────
+function buildRuck() {
+  const p = ME;
+  const phase = p.current_phase;
+  const wk = p.current_week;
+
+  const ruckPlan = [
+    {phase:'base', weeks:[
+      {wk:1, dist:4, load:30, target:'60:00', notes:'Easy pace. Establish baseline.'},
+      {wk:2, dist:5, load:30, target:'75:00', notes:'Add distance. Same load.'},
+      {wk:3, dist:5, load:35, target:'75:00', notes:'Add load. Same distance.'},
+      {wk:4, dist:4, load:30, target:'52:00', notes:'DELOAD. Easy effort.'},
+    ]},
+    {phase:'build', weeks:[
+      {wk:1, dist:6, load:35, target:'84:00', notes:'Build phase begins. Push pace.'},
+      {wk:2, dist:7, load:40, target:'98:00', notes:'Distance + load increase.'},
+      {wk:3, dist:8, load:40, target:'108:00', notes:'Peak build volume.'},
+      {wk:4, dist:5, load:35, target:'65:00', notes:'DELOAD.'},
+    ]},
+    {phase:'peak', weeks:[
+      {wk:1, dist:8, load:45, target:'104:00', notes:'Heavy load. Selection pace.'},
+      {wk:2, dist:10, load:45, target:'130:00', notes:'Selection distance.'},
+      {wk:3, dist:10, load:50, target:'130:00', notes:'Peak volume. Max effort.'},
+      {wk:4, dist:6, load:35, target:'72:00', notes:'DELOAD before taper.'},
+    ]},
+    {phase:'taper', weeks:[
+      {wk:1, dist:6, load:35, target:'72:00', notes:'Maintain. Don\'t build.'},
+      {wk:2, dist:5, load:35, target:'60:00', notes:'Reduce volume.'},
+      {wk:3, dist:5, load:35, target:'60:00', notes:'Easy. Stay fresh.'},
+      {wk:4, dist:4, load:30, target:'48:00', notes:'Pre-selection. Rest.'},
+    ]},
+  ];
+
+  let html = `<div class="panel-title">RUCK PROGRESSION</div><div class="panel-sub">PROGRESSIVE OVERLOAD — DISTANCE & LOAD</div>`;
+
+  html += `<div class="intel-box">Rules: Increase distance OR load each week, never both simultaneously. Deload every 4th week. Track every ruck: date, distance, load, time, weather, foot condition. Your Saturday ruck log is your most important SFAS prep document.</div>`;
+
+  ruckPlan.forEach(pp => {
+    const isCurrent = pp.phase === phase;
+    html += `<div class="card" style="${isCurrent?'border-color:var(--od);':''}"><div class="card-header"><div class="card-title">${pp.phase.toUpperCase()} PHASE</div></div><div class="card-body">
+      <table class="ruck-table"><tr><th>WK</th><th>DIST</th><th>LOAD</th><th>TARGET</th><th>NOTES</th></tr>`;
+    pp.weeks.forEach(w => {
+      const isThisWeek = isCurrent && w.wk === wk;
+      html += `<tr class="${isThisWeek?'ruck-current':''}"><td>${w.wk}</td><td>${w.dist} mi</td><td>${w.load}#</td><td>${w.target}</td><td style="font-size:10px;">${w.notes}</td></tr>`;
+    });
+    html += `</table></div></div>`;
+  });
+
+  $('panel-ruck').innerHTML = html;
+}
+
+// ── NUTRITION ────────────────────────────────────────────────
+function buildNutrition() {
+  const bw = ME.bodyweight || 180;
+  const proteinPerLb = 1.1;
+  const protein = Math.round(bw * proteinPerLb);
+  const heavyCal = [Math.round(bw*17.8), Math.round(bw*19.4)];
+  const modCal = [Math.round(bw*15.6), Math.round(bw*17.2)];
+  const restCal = [Math.round(bw*13.3), Math.round(bw*14.4)];
+  const ruckCal = [Math.round(bw*19), Math.round(bw*20.5)];
+  const carbHeavy = Math.round(bw * 2.3);
+  const carbMod = Math.round(bw * 1.9);
+  const carbRest = Math.round(bw * 1.5);
+  const carbRuck = Math.round(bw * 2.5);
+  const fatTarget = Math.round(bw * 0.45);
+
+  const html = `
+    <div class="panel-title">NUTRITION</div>
+    <div class="panel-sub">PERFORMANCE FUELING — SCALED TO ${bw} LBS</div>
+
+    <div class="stat-grid">
+      <div class="stat-block"><div class="stat-label">HEAVY DAY</div><div class="stat-value">${heavyCal[0]}-${heavyCal[1]}</div><div class="stat-sub">cal</div></div>
+      <div class="stat-block"><div class="stat-label">RUCK DAY</div><div class="stat-value" style="color:var(--amber)">${ruckCal[0]}-${ruckCal[1]}</div><div class="stat-sub">cal (highest)</div></div>
+      <div class="stat-block"><div class="stat-label">MODERATE DAY</div><div class="stat-value">${modCal[0]}-${modCal[1]}</div><div class="stat-sub">cal</div></div>
+      <div class="stat-block"><div class="stat-label">REST DAY</div><div class="stat-value">${restCal[0]}-${restCal[1]}</div><div class="stat-sub">cal</div></div>
+      <div class="stat-block"><div class="stat-label">DAILY PROTEIN</div><div class="stat-value">${protein}g</div><div class="stat-sub">${proteinPerLb}g/lb</div></div>
+      <div class="stat-block"><div class="stat-label">DAILY FAT</div><div class="stat-value">~${fatTarget}g</div><div class="stat-sub">~0.45g/lb</div></div>
+    </div>
+
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="switchNutTab('meals',this)">MEAL PLANS</button>
+      <button class="tab-btn" onclick="switchNutTab('ruck',this)">RUCK DAY</button>
+      <button class="tab-btn" onclick="switchNutTab('field',this)">FIELD / DFAC</button>
+      <button class="tab-btn" onclick="switchNutTab('supps',this)">SUPPLEMENTS</button>
+    </div>
+
+    <div class="tab-panel nut-tab active" id="nut-meals">
+      <div class="card"><div class="card-header"><div class="card-title">HEAVY TRAINING DAY — SAMPLE PLAN</div></div><div class="card-body" style="font-size:12px;">
+        <table class="ruck-table">
+          <tr><th>TIME</th><th>MEAL</th><th>FOODS</th><th>MACROS</th></tr>
+          <tr><td>0500</td><td style="font-family:var(--font-c);font-weight:700;">PRE-WORKOUT</td><td>Oats w/ banana, peanut butter, honey; 2 whole eggs</td><td style="color:var(--od);font-family:var(--font-m);">~550 cal<br>30P/70C/20F</td></tr>
+          <tr><td>0530-0730</td><td style="font-family:var(--font-c);font-weight:700;">INTRA-TRAINING</td><td>32oz water + electrolytes; optional carb drink (30-40g fast carbs)</td><td style="color:var(--od);font-family:var(--font-m);">~150 cal</td></tr>
+          <tr><td>0800</td><td style="font-family:var(--font-c);font-weight:700;">POST-WORKOUT</td><td>40g whey + white rice + grilled chicken + spinach</td><td style="color:var(--od);font-family:var(--font-m);">~750 cal<br>55P/85C/15F</td></tr>
+          <tr><td>1100</td><td style="font-family:var(--font-c);font-weight:700;">MEAL 3</td><td>Turkey & avocado wrap (whole wheat), sweet potato, Greek yogurt</td><td style="color:var(--od);font-family:var(--font-m);">~700 cal<br>45P/75C/25F</td></tr>
+          <tr><td>1400</td><td style="font-family:var(--font-c);font-weight:700;">MEAL 4</td><td>Salmon or lean beef, brown rice, roasted vegetables, olive oil</td><td style="color:var(--od);font-family:var(--font-m);">~650 cal<br>40P/65C/25F</td></tr>
+          <tr><td>1730</td><td style="font-family:var(--font-c);font-weight:700;">MEAL 5</td><td>Chicken thigh stir-fry w/ rice noodles, mixed vegetables, sesame oil</td><td style="color:var(--od);font-family:var(--font-m);">~600 cal<br>40P/70C/18F</td></tr>
+          <tr><td>2030</td><td style="font-family:var(--font-c);font-weight:700;">PRE-SLEEP</td><td>Casein shake or cottage cheese, almonds, 8oz tart cherry juice</td><td style="color:var(--od);font-family:var(--font-m);">~350 cal<br>35P/20C/12F</td></tr>
+        </table>
+        <div class="intel-box" style="margin-top:10px;">Daily total: ~${heavyCal[0]} cal | ~${protein}g protein | ~${carbHeavy}g carbs | ~${fatTarget}g fat. Adjust portions up/down to hit your specific targets.</div>
+      </div></div>
+
+      <div class="card"><div class="card-header"><div class="card-title">REST / RECOVERY DAY — SAMPLE PLAN</div></div><div class="card-body" style="font-size:12px;">
+        <table class="ruck-table">
+          <tr><th>TIME</th><th>MEAL</th><th>FOODS</th><th>MACROS</th></tr>
+          <tr><td>0700</td><td style="font-family:var(--font-c);font-weight:700;">BREAKFAST</td><td>3 whole eggs, 2 egg whites, avocado toast on sourdough, berries</td><td style="color:var(--od);font-family:var(--font-m);">~550 cal<br>35P/40C/28F</td></tr>
+          <tr><td>1030</td><td style="font-family:var(--font-c);font-weight:700;">SNACK</td><td>Greek yogurt, handful of almonds, honey drizzle</td><td style="color:var(--od);font-family:var(--font-m);">~300 cal<br>20P/25C/14F</td></tr>
+          <tr><td>1300</td><td style="font-family:var(--font-c);font-weight:700;">LUNCH</td><td>Grilled chicken salad, quinoa, olive oil dressing, mixed greens</td><td style="color:var(--od);font-family:var(--font-m);">~600 cal<br>45P/45C/22F</td></tr>
+          <tr><td>1630</td><td style="font-family:var(--font-c);font-weight:700;">SNACK</td><td>Protein shake, banana, peanut butter</td><td style="color:var(--od);font-family:var(--font-m);">~400 cal<br>35P/35C/12F</td></tr>
+          <tr><td>1900</td><td style="font-family:var(--font-c);font-weight:700;">DINNER</td><td>Salmon, sweet potato, steamed broccoli, olive oil</td><td style="color:var(--od);font-family:var(--font-m);">~600 cal<br>40P/50C/22F</td></tr>
+          <tr><td>2100</td><td style="font-family:var(--font-c);font-weight:700;">PRE-SLEEP</td><td>Casein shake, tart cherry juice</td><td style="color:var(--od);font-family:var(--font-m);">~250 cal<br>30P/15C/5F</td></tr>
+        </table>
+        <div class="intel-box" style="margin-top:10px;">Rest day: ~${restCal[0]} cal | ~${protein}g protein | ~${carbRest}g carbs | ~${fatTarget}g fat. Shift ratio toward more protein and fat, fewer carbs. Recovery is the priority.</div>
+      </div></div>
+    </div>
+
+    <div class="tab-panel nut-tab" id="nut-ruck">
+      <div class="card"><div class="card-header"><div class="card-title">RUCK DAY FUELING PROTOCOL</div></div><div class="card-body" style="font-size:12px;line-height:1.6;">
+        <div class="intel-box amber">Ruck days are your highest calorie day (~${ruckCal[0]}-${ruckCal[1]} cal). You are burning 600-1000+ calories during a long loaded ruck on top of your baseline needs. Under-fueling here = degraded performance + muscle loss.</div>
+
+        <div style="margin-top:12px;"><strong style="color:var(--od2);">NIGHT BEFORE (Carb Pre-load):</strong></div>
+        <div style="padding:4px 0;">Large pasta or rice-based dinner. Add bread. This is not the night for salads. Target an extra 100-150g carbs above your normal dinner. Your muscles store this as glycogen overnight.</div>
+
+        <div style="margin-top:10px;"><strong style="color:var(--od2);">PRE-RUCK (60-90min before):</strong></div>
+        <div style="padding:4px 0;">Oats + banana + honey + peanut butter. Easy to digest, high carb, moderate protein. 500-600 calories. Drink 16-20oz water with a pinch of salt.</div>
+
+        <div style="margin-top:10px;"><strong style="color:var(--od2);">DURING RUCK (for rucks over 90min):</strong></div>
+        <div style="padding:4px 0;">Every 45 minutes: 1 gel pack or a handful of gummy bears (30-40g fast carbs). Sip electrolyte water continuously — 20-32oz per hour depending on heat. Carry a Clif bar or PB&J in your pocket for rucks over 2 hours.</div>
+
+        <div style="margin-top:10px;"><strong style="color:var(--od2);">POST-RUCK (within 30min):</strong></div>
+        <div style="padding:4px 0;">This is the most important meal of the week. 40-50g whey protein + 80-100g fast carbs (white rice, bread, dextrose drink). Low fat to speed absorption. Then eat a full meal within 2 hours: chicken/salmon + rice + vegetables.</div>
+
+        <div style="margin-top:10px;"><strong style="color:var(--od2);">REST OF RUCK DAY:</strong></div>
+        <div style="padding:4px 0;">Continue eating every 2-3 hours. Keep protein at every meal. Extra carbs throughout. 8oz tart cherry juice before bed. Magnesium before sleep. This is the day you eat the most — do not restrict.</div>
+      </div></div>
+
+      <div class="card"><div class="card-header"><div class="card-title">HYDRATION — RUCK SPECIFIC</div></div><div class="card-body" style="font-size:12px;line-height:1.6;">
+        <div style="padding:4px 0;"><strong style="color:var(--od2);">Pre-ruck:</strong> 16-20oz with electrolytes 60min before</div>
+        <div style="padding:4px 0;"><strong style="color:var(--od2);">During:</strong> 20-32oz per hour with sodium (1000-1500mg/hr in heat). Sip every 15min. Do not wait until thirsty.</div>
+        <div style="padding:4px 0;"><strong style="color:var(--od2);">Post-ruck:</strong> 24oz per pound of body weight lost. Weigh before and after if possible.</div>
+        <div class="intel-box" style="margin-top:8px;">Signs you are behind on fluids: dark urine, headache, muscle cramps, dizziness, unusual fatigue. If you experience these during a ruck, you started under-hydrated. Fix it the night before.</div>
+      </div></div>
+    </div>
+
+    <div class="tab-panel nut-tab" id="nut-field">
+      <div class="card"><div class="card-header"><div class="card-title">DFAC (DINING FACILITY) STRATEGY</div></div><div class="card-body" style="font-size:12px;line-height:1.6;">
+        <div style="padding:4px 0;"><strong style="color:var(--od2);">Rule 1:</strong> Build every plate around a lean protein source first. Hit the protein line before anything else.</div>
+        <div style="padding:4px 0;"><strong style="color:var(--od2);">Rule 2:</strong> Choose rice or potatoes over bread and pasta when available — more nutrient-dense per calorie.</div>
+        <div style="padding:4px 0;"><strong style="color:var(--od2);">Rule 3:</strong> Load up on vegetables at every meal. They are free volume with micronutrients.</div>
+        <div style="padding:4px 0;"><strong style="color:var(--od2);">Rule 4:</strong> Avoid fried foods, sugary drinks, and desserts as daily staples. Save them for rare morale meals.</div>
+        <div style="padding:4px 0;"><strong style="color:var(--od2);">Rule 5:</strong> Bring your own protein shake to the DFAC if the protein options are weak. A shaker bottle with pre-measured whey is your insurance policy.</div>
+      </div></div>
+
+      <div class="card"><div class="card-header"><div class="card-title">MRE STRATEGY</div></div><div class="card-body" style="font-size:12px;line-height:1.6;">
+        <div class="intel-box amber">MREs average 1,200-1,300 calories. They are calorie-dense but sodium-heavy and fiber-low. When relying on MREs, increase water intake by 50% and expect GI adjustment for the first 2-3 days.</div>
+        <div style="padding:4px 0;margin-top:8px;"><strong style="color:var(--od2);">Best MRE items:</strong> Main entrees (protein source), peanut butter, crackers, tortillas, nut/raisin mix, cheese spread</div>
+        <div style="padding:4px 0;"><strong style="color:var(--od2);">Skip if possible:</strong> Candy, dairy shakes (GI issues), high-sugar drinks</div>
+        <div style="padding:4px 0;"><strong style="color:var(--od2);">Pro move:</strong> Trade with teammates for extra peanut butter and main entrees. Ditch the candy. Add electrolyte packets to your water.</div>
+      </div></div>
+
+      <div class="card"><div class="card-header"><div class="card-title">TRAVEL / FIELD ESSENTIALS</div></div><div class="card-body" style="font-size:12px;line-height:1.6;">
+        <div style="font-family:var(--font-c);font-weight:700;color:var(--tan);margin-bottom:8px;">PACK THESE NON-PERISHABLES:</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px 16px;">
+          <div>· Whey protein (individual packets)</div><div>· Electrolyte packets (LMNT, Liquid IV)</div>
+          <div>· Peanut butter packets</div><div>· Beef jerky / meat sticks</div>
+          <div>· Instant oats (individual cups)</div><div>· Trail mix (nuts + dried fruit)</div>
+          <div>· Protein bars (Rxbar, Quest)</div><div>· Honey packets</div>
+          <div>· Gel packs (for long rucks)</div><div>· Gummy bears (fast carbs)</div>
+          <div>· Tuna packets</div><div>· Rice cakes</div>
+        </div>
+        <div class="intel-box" style="margin-top:10px;">If you miss a meal, do not skip — eat whatever is available and get back on track at the next meal. Consistency over perfection. A protein bar and peanut butter packet is better than nothing.</div>
+      </div></div>
+    </div>
+
+    <div class="tab-panel nut-tab" id="nut-supps">
+      <div class="card"><div class="card-header"><div class="card-title">SUPPLEMENT PROTOCOL</div></div><div class="card-body" style="font-size:12px;">
+        <div class="intel-box">Supplements are the last 5%. They do not replace solid nutrition. But when the foundation is in place, these are evidence-based and worth the investment.</div>
+        <div style="display:grid;gap:6px;margin-top:10px;">
+          <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);"><span><strong>Creatine Monohydrate</strong><br><span style="color:var(--muted);font-size:11px;">Strength, power output, recovery</span></span><span style="color:var(--od);font-family:var(--font-m);white-space:nowrap;">5g daily<br><span style="font-size:9px;color:var(--muted);">Any time w/ meal</span></span></div>
+          <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);"><span><strong>Whey Protein Isolate</strong><br><span style="color:var(--muted);font-size:11px;">Fast protein to hit daily target</span></span><span style="color:var(--od);font-family:var(--font-m);white-space:nowrap;">30-40g<br><span style="font-size:9px;color:var(--muted);">Post-workout</span></span></div>
+          <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);"><span><strong>Casein Protein</strong><br><span style="color:var(--muted);font-size:11px;">Slow-release aminos overnight</span></span><span style="color:var(--od);font-family:var(--font-m);white-space:nowrap;">30-40g<br><span style="font-size:9px;color:var(--muted);">Pre-sleep</span></span></div>
+          <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);"><span><strong>Electrolyte Mix</strong><br><span style="color:var(--muted);font-size:11px;">Na/K/Mg balance</span></span><span style="color:var(--od);font-family:var(--font-m);white-space:nowrap;">1-2 servings<br><span style="font-size:9px;color:var(--muted);">During/after training</span></span></div>
+          <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);"><span><strong>Omega-3 Fish Oil</strong><br><span style="color:var(--muted);font-size:11px;">Joint health, inflammation</span></span><span style="color:var(--od);font-family:var(--font-m);white-space:nowrap;">2-3g EPA/DHA<br><span style="font-size:9px;color:var(--muted);">With a meal</span></span></div>
+          <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);"><span><strong>Vitamin D3</strong><br><span style="color:var(--muted);font-size:11px;">Bone health, immune support</span></span><span style="color:var(--od);font-family:var(--font-m);white-space:nowrap;">2,000-5,000 IU<br><span style="font-size:9px;color:var(--muted);">Morning w/ fat</span></span></div>
+          <div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--border);"><span><strong>Magnesium Glycinate</strong><br><span style="color:var(--muted);font-size:11px;">Sleep quality, muscle relaxation</span></span><span style="color:var(--od);font-family:var(--font-m);white-space:nowrap;">200-400mg<br><span style="font-size:9px;color:var(--muted);">Pre-sleep</span></span></div>
+          <div style="display:flex;justify-content:space-between;padding:6px 0;"><span><strong>Tart Cherry Juice</strong><br><span style="color:var(--muted);font-size:11px;">Melatonin + anti-inflammatory</span></span><span style="color:var(--od);font-family:var(--font-m);white-space:nowrap;">8oz<br><span style="font-size:9px;color:var(--muted);">Pre-sleep</span></span></div>
+        </div>
+        <div class="intel-box red" style="margin-top:10px;">Avoid proprietary blends, fat burners, and pre-workouts loaded with stimulants. Caffeine (200-400mg from coffee) is fine pre-training if you tolerate it, but cut it off by 1400 to protect sleep.</div>
+      </div></div>
+    </div>
+  `;
+  $('panel-nutrition').innerHTML = html;
+}
+
+function switchNutTab(key, btn) {
+  document.querySelectorAll('.nut-tab').forEach(t => t.classList.remove('active'));
+  btn.closest('.tab-bar').querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  $('nut-'+key).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── LEADERBOARD ──────────────────────────────────────────────
+async function buildLeaderboard() {
+  ALL_PROFILES = await dbGet('profiles');
+  const tests = await dbGet('test_results');
+  const logs = await dbGet('session_logs');
+
+  const categories = [
+    {key:'strength', label:'STRENGTH', metrics:['deadlift_5rm','bench_5rm','pullup_max']},
+    {key:'run', label:'RUN', metrics:['run_3mi','run_5k']},
+    {key:'ruck', label:'RUCK', metrics:['ruck_6mi','ruck_12mi']},
+    {key:'consistency', label:'CONSISTENCY', metrics:['streak']},
+  ];
+
+  let html = `<div class="panel-title">LEADERBOARD</div><div class="panel-sub">TEAM RANKINGS</div>`;
+
+  html += `<div class="tab-bar">
+    ${categories.map((c,i) => `<button class="tab-btn ${i===0?'active':''}" onclick="switchLbTab('${c.key}',this)">${c.label}</button>`).join('')}
+  </div>`;
+
+  categories.forEach((cat, catIdx) => {
+    html += `<div class="tab-panel lb-tab ${catIdx===0?'active':''}" id="lb-${cat.key}">`;
+
+    if (cat.key === 'consistency') {
+      const sorted = [...ALL_PROFILES].sort((a,b) => (b.current_streak||0)-(a.current_streak||0));
+      html += `<table class="lb-table"><tr><th>#</th><th>NAME</th><th>STREAK</th><th>BEST</th></tr>`;
+      sorted.forEach((p,i) => {
+        html += `<tr><td class="lb-rank ${i<3?'lb-rank-'+(i+1):''}">${i+1}</td><td class="lb-name">${p.name}</td><td class="lb-value">🔥 ${p.current_streak||0} days</td><td>${p.longest_streak||0}</td></tr>`;
+      });
+      html += `</table>`;
+    } else {
+      cat.metrics.forEach(metric => {
+        const metricTests = tests.filter(t => t.test_type === metric);
+        // Get best per person
+        const bests = {};
+        metricTests.forEach(t => {
+          if (!bests[t.profile_id] || parseFloat(t.value) > parseFloat(bests[t.profile_id].value)) {
+            bests[t.profile_id] = t;
+          }
+        });
+        const sorted = Object.values(bests).sort((a,b) => {
+          // For time-based: lower is better. For weight/reps: higher is better
+          if (['run_3mi','run_5k','ruck_6mi','ruck_12mi','row_1000m','farmer_carry_400m'].includes(metric)) {
+            return a.value.localeCompare(b.value);
+          }
+          return parseFloat(b.value) - parseFloat(a.value);
+        });
+
+        const label = metric.replace(/_/g,' ').toUpperCase();
+        html += `<div style="margin-bottom:16px;"><div style="font-family:var(--font-c);font-size:11px;letter-spacing:1.5px;color:var(--tan);margin-bottom:8px;">${label}</div>`;
+        if (sorted.length) {
+          html += `<table class="lb-table"><tr><th>#</th><th>NAME</th><th>VALUE</th><th>DATE</th></tr>`;
+          sorted.forEach((t,i) => {
+            const name = ALL_PROFILES.find(p=>p.id===t.profile_id)?.name || '?';
+            html += `<tr><td class="lb-rank ${i<3?'lb-rank-'+(i+1):''}">${i+1}</td><td class="lb-name">${name}</td><td class="lb-value">${t.value}</td><td style="font-size:10px;">${t.test_date||''}</td></tr>`;
+          });
+          html += `</table>`;
+        } else {
+          html += `<div style="color:var(--muted);font-size:12px;">No results logged yet.</div>`;
+        }
+        html += `</div>`;
+      });
+    }
+    html += `</div>`;
+  });
+
+  $('panel-leaderboard').innerHTML = html;
+}
+
+function switchLbTab(key, btn) {
+  document.querySelectorAll('.lb-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  $('lb-'+key).classList.add('active');
+  btn.classList.add('active');
+}
+
+// ── TESTS ────────────────────────────────────────────────────
+async function buildTests() {
+  const tests = await dbGet('test_results', {profile_id: ME.id});
+  tests.sort((a,b) => (b.test_date||b.created_at||'').localeCompare(a.test_date||a.created_at||''));
+
+  let html = `<div class="panel-title">TEST RESULTS</div><div class="panel-sub">YOUR PERFORMANCE HISTORY</div>
+    <button class="btn btn-primary btn-sm" onclick="openModal('modal-log-test')" style="margin-bottom:16px;">◎ LOG NEW TEST</button>`;
+
+  if (tests.length) {
+    html += `<table class="lb-table"><tr><th>DATE</th><th>TEST</th><th>VALUE</th><th>NOTES</th></tr>`;
+    tests.forEach(t => {
+      html += `<tr><td style="font-size:10px;">${t.test_date||''}</td><td class="lb-name">${t.test_type.replace(/_/g,' ').toUpperCase()}</td><td class="lb-value">${t.value}</td><td style="font-size:10px;max-width:150px;overflow:hidden;text-overflow:ellipsis;">${t.notes||''}</td></tr>`;
+    });
+    html += `</table>`;
+  } else {
+    html += `<div class="intel-box">No tests logged yet. Hit "Log New Test" to start tracking your benchmarks.</div>`;
+  }
+  $('panel-tests').innerHTML = html;
+}
+
+async function saveTestResult() {
+  const test = {
+    profile_id: ME.id,
+    test_type: $('test-type').value,
+    value: $('test-value').value.trim(),
+    test_date: $('test-date').value || today(),
+    notes: $('test-notes').value.trim(),
+  };
+  if (!test.value) return notify('Enter a value.', true);
+  await dbInsert('test_results', test);
+  closeModal('modal-log-test');
+  notify('Test result saved.');
+  if (activePanel === 'tests') buildTests();
+  if (activePanel === 'leaderboard') buildLeaderboard();
+}
+
+// ── SESSION LOG ──────────────────────────────────────────────
+async function buildLog() {
+  const logs = await dbGet('session_logs', {profile_id: ME.id});
+  logs.sort((a,b) => (b.session_date||b.created_at||'').localeCompare(a.session_date||a.created_at||''));
+
+  let html = `<div class="panel-title">SESSION LOG</div><div class="panel-sub">YOUR TRAINING HISTORY</div>
+    <button class="btn btn-primary btn-sm" onclick="openModal('modal-log-session')" style="margin-bottom:16px;">⊕ LOG SESSION</button>`;
+
+  if (logs.length) {
+    logs.forEach(l => {
+      html += `<div class="card"><div class="card-body" style="display:flex;align-items:center;gap:12px;">
+        <span style="font-family:var(--font-m);font-size:10px;color:var(--muted);min-width:70px;">${l.session_date||''}</span>
+        <span class="day-tag ${l.session_type==='ruck'?'sfas':l.session_type==='run'?'pm':'eod'}" style="font-size:9px;">${l.session_type}</span>
+        <span style="flex:1;font-size:12px;">${l.notes||''}</span>
+        <span style="font-family:var(--font-m);font-size:10px;color:var(--od);">${l.duration_min?l.duration_min+'m':''}</span>
+        <span style="font-family:var(--font-m);font-size:10px;">Feel:${l.feel_score||'-'} Rec:${l.recovery_score||'-'}</span>
+      </div></div>`;
+    });
+  } else {
+    html += `<div class="intel-box">No sessions logged. Start tracking to build your training history and maintain your streak.</div>`;
+  }
+  $('panel-log').innerHTML = html;
+}
+
+async function saveSessionLog() {
+  const log = {
+    profile_id: ME.id,
+    session_type: $('log-type').value,
+    session_date: $('log-date').value || today(),
+    duration_min: parseInt($('log-duration').value) || null,
+    feel_score: parseInt($('log-feel').value) || null,
+    recovery_score: parseInt($('log-recovery').value) || null,
+    notes: $('log-notes').value.trim(),
+    path: ME.path,
+    phase: ME.current_phase,
+    week: ME.current_week,
+  };
+  await dbInsert('session_logs', log);
+
+  // Update streak
+  const todayStr = today();
+  if (ME.last_active_date !== todayStr) {
+    const yesterday = new Date(); yesterday.setDate(yesterday.getDate()-1);
+    const yStr = yesterday.toISOString().split('T')[0];
+    const newStreak = (ME.last_active_date === yStr) ? (ME.current_streak||0)+1 : 1;
+    const longest = Math.max(newStreak, ME.longest_streak||0);
+    await dbUpdate('profiles', ME.id, {current_streak: newStreak, longest_streak: longest, last_active_date: todayStr});
+    ME.current_streak = newStreak;
+    ME.longest_streak = longest;
+    ME.last_active_date = todayStr;
+  }
+
+  closeModal('modal-log-session');
+  notify('Session logged. 🔥');
+  if (activePanel === 'log') buildLog();
+  if (activePanel === 'dashboard') buildDashboard();
+}
+
+// ── RUCK LOG ─────────────────────────────────────────────────
+function calcPace(totalTime, dist) {
+  if (!totalTime || !dist) return '';
+  const parts = totalTime.split(':');
+  const totalSec = parseInt(parts[0]||0)*60 + parseInt(parts[1]||0);
+  const paceSec = Math.round(totalSec / dist);
+  const pMin = Math.floor(paceSec/60);
+  const pSec = String(paceSec%60).padStart(2,'0');
+  return pMin+':'+pSec;
+}
+
+async function saveRuckLog() {
+  const dist = parseFloat($('rl-dist').value);
+  const time = $('rl-time').value.trim();
+  if (!dist) return notify('Enter distance.', true);
+  if (!time) return notify('Enter time.', true);
+  const pace = $('rl-pace').value.trim() || calcPace(time, dist);
+  
+  const entry = {
+    profile_id: ME.id,
+    activity_type: 'ruck',
+    activity_date: $('rl-date').value || today(),
+    distance: dist,
+    load: parseInt($('rl-load').value) || null,
+    total_time: time,
+    pace: pace,
+    rpe: parseInt($('rl-rpe').value) || null,
+    terrain: $('rl-terrain').value,
+    foot_condition: $('rl-foot').value,
+    route_notes: $('rl-route').value.trim() || null,
+    weather: $('rl-weather').value.trim() || null,
+    heart_rate: parseInt($('rl-hr').value) || null,
+    gear_notes: $('rl-gear').value.trim() || null,
+    is_pr: false,
+    details: null,
+  };
+  await dbInsert('activity_logs', entry);
+  closeModal('modal-ruck-log');
+  notify('Ruck logged — ' + dist + 'mi @ ' + (entry.load||'?') + '# in ' + time);
+  if (activePanel === 'activity') buildActivity();
+}
+
+// ── RUN LOG ──────────────────────────────────────────────────
+async function saveRunLog() {
+  const dist = parseFloat($('rn-dist').value);
+  const time = $('rn-time').value.trim();
+  if (!dist) return notify('Enter distance.', true);
+  if (!time) return notify('Enter time.', true);
+  const pace = $('rn-pace').value.trim() || calcPace(time, dist);
+  
+  const entry = {
+    profile_id: ME.id,
+    activity_type: 'run',
+    activity_date: $('rn-date').value || today(),
+    distance: dist,
+    load: null,
+    total_time: time,
+    pace: pace,
+    rpe: parseInt($('rn-rpe').value) || null,
+    terrain: $('rn-terrain').value,
+    foot_condition: null,
+    route_notes: $('rn-notes').value.trim() || null,
+    weather: null,
+    heart_rate: parseInt($('rn-hr').value) || null,
+    gear_notes: null,
+    is_pr: false,
+    details: JSON.stringify({run_type: $('rn-type').value}),
+  };
+  await dbInsert('activity_logs', entry);
+  closeModal('modal-run-log');
+  notify('Run logged — ' + dist + 'mi in ' + time + ' (' + pace + '/mi)');
+  if (activePanel === 'activity') buildActivity();
+}
+
+// ── LIFT LOG ─────────────────────────────────────────────────
+let liftSetCount = 0;
+function addLiftSet() {
+  liftSetCount++;
+  const n = liftSetCount;
+  const container = $('ll-sets-list');
+  const row = document.createElement('div');
+  row.className = 'setup-grid';
+  row.style.marginBottom = '6px';
+  row.innerHTML = `
+    <div style="display:flex;align-items:center;gap:4px;">
+      <span style="font-family:var(--font-m);font-size:10px;color:var(--od);min-width:20px;">S${n}</span>
+      <input type="number" id="ll-s${n}-reps" placeholder="Reps" style="width:60px;">
+      <span style="font-size:10px;color:var(--muted);">×</span>
+      <input type="number" id="ll-s${n}-wt" placeholder="Weight" style="width:70px;">
+      <span style="font-family:var(--font-m);font-size:9px;color:var(--muted);">#</span>
+      <select id="ll-s${n}-rpe" style="width:60px;font-size:10px;">
+        <option value="">RPE</option>
+        <option value="6">6</option><option value="7">7</option><option value="8">8</option>
+        <option value="9">9</option><option value="9.5">9.5</option><option value="10">10</option>
+      </select>
+    </div>`;
+  container.appendChild(row);
+}
+
+function collectLiftSets() {
+  const sets = [];
+  for (let i = 1; i <= liftSetCount; i++) {
+    const reps = parseInt($('ll-s'+i+'-reps')?.value);
+    const wt = parseInt($('ll-s'+i+'-wt')?.value);
+    const rpe = $('ll-s'+i+'-rpe')?.value || null;
+    if (reps || wt) sets.push({set: i, reps: reps||0, weight: wt||0, rpe});
+  }
+  return sets;
+}
+
+async function saveLiftLog() {
+  const exercise = $('ll-exercise').value;
+  const sets = collectLiftSets();
+  if (!sets.length) return notify('Add at least one set.', true);
+  
+  const isPR = $('ll-pr').classList.contains('on');
+  const topSet = sets.reduce((best, s) => (s.weight > (best.weight||0)) ? s : best, sets[0]);
+  const summary = sets.length + ' sets, top: ' + topSet.reps + '×' + topSet.weight + '#';
+  
+  const entry = {
+    profile_id: ME.id,
+    activity_type: 'lift',
+    activity_date: $('ll-date').value || today(),
+    distance: null,
+    load: topSet.weight,
+    total_time: null,
+    pace: null,
+    rpe: null,
+    terrain: null,
+    foot_condition: null,
+    route_notes: $('ll-form').value.trim() || null,
+    weather: null,
+    heart_rate: null,
+    gear_notes: null,
+    is_pr: isPR,
+    details: JSON.stringify({
+      exercise,
+      sets,
+      tempo: $('ll-tempo').value.trim() || null,
+      rest: $('ll-rest').value.trim() || null,
+      form_notes: $('ll-form').value.trim() || null,
+    }),
+  };
+  await dbInsert('activity_logs', entry);
+  closeModal('modal-lift-log');
+  
+  // Reset sets
+  $('ll-sets-list').innerHTML = '';
+  liftSetCount = 0;
+  
+  notify((isPR?'🏆 PR! ':'') + exercise.replace(/_/g,' ') + ' — ' + summary);
+  if (activePanel === 'activity') buildActivity();
+}
+
+function openRuckLog() {
+  $('rl-date').value = today();
+  openModal('modal-ruck-log');
+}
+function openRunLog() {
+  $('rn-date').value = today();
+  openModal('modal-run-log');
+}
+function openLiftLog() {
+  $('ll-date').value = today();
+  $('ll-sets-list').innerHTML = '';
+  liftSetCount = 0;
+  addLiftSet(); addLiftSet(); addLiftSet(); // Start with 3 sets
+  openModal('modal-lift-log');
+}
+
+// ── ACTIVITY LOG PANEL ───────────────────────────────────────
+async function buildActivity() {
+  const logs = await dbGet('activity_logs', {profile_id: ME.id});
+  logs.sort((a,b) => (b.activity_date||b.created_at||'').localeCompare(a.activity_date||a.created_at||''));
+  
+  let html = `
+    <div class="panel-title">ACTIVITY LOG</div>
+    <div class="panel-sub">DETAILED RUCK, RUN & LIFT HISTORY</div>
+    <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
+      <button class="btn btn-primary btn-sm" onclick="openRuckLog()">⬡ LOG RUCK</button>
+      <button class="btn btn-sm" onclick="openRunLog()">◇ LOG RUN</button>
+      <button class="btn btn-sm" onclick="openLiftLog()">▣ LOG LIFT</button>
+    </div>
+    <div class="tab-bar">
+      <button class="tab-btn active" onclick="filterActivityTab('all',this)">ALL</button>
+      <button class="tab-btn" onclick="filterActivityTab('ruck',this)">RUCKS</button>
+      <button class="tab-btn" onclick="filterActivityTab('run',this)">RUNS</button>
+      <button class="tab-btn" onclick="filterActivityTab('lift',this)">LIFTS</button>
+    </div>
+    <div id="activity-list">`;
+  
+  if (!logs.length) {
+    html += `<div class="intel-box">No activities logged yet. Use the buttons above to start recording your rucks, runs, and lifts with full detail.</div>`;
+  }
+  
+  logs.forEach(l => {
+    const typeColors = {ruck:'sfas', run:'pm', lift:'eod'};
+    const typeIcons = {ruck:'⬡', run:'◇', lift:'▣'};
+    let details_parsed = null;
+    try { details_parsed = l.details ? JSON.parse(l.details) : null; } catch(e) {}
+    
+    let detailHtml = '';
+    if (l.activity_type === 'ruck') {
+      detailHtml = `
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:6px 16px;margin-top:8px;">
+          <div><span style="color:var(--muted);font-size:10px;">DISTANCE</span><br><span style="color:var(--od2);">${l.distance||'?'} mi</span></div>
+          <div><span style="color:var(--muted);font-size:10px;">LOAD</span><br><span style="color:var(--od2);">${l.load||'?'}#</span></div>
+          <div><span style="color:var(--muted);font-size:10px;">TIME</span><br><span style="color:var(--od2);">${l.total_time||'?'}</span></div>
+          <div><span style="color:var(--muted);font-size:10px;">PACE</span><br><span style="color:var(--od2);">${l.pace||'?'}/mi</span></div>
+          <div><span style="color:var(--muted);font-size:10px;">RPE</span><br><span style="color:var(--od2);">${l.rpe||'?'}/10</span></div>
+          <div><span style="color:var(--muted);font-size:10px;">TERRAIN</span><br><span>${l.terrain||'?'}</span></div>
+          <div><span style="color:var(--muted);font-size:10px;">FEET</span><br><span style="${l.foot_condition==='good'?'color:var(--green)':l.foot_condition==='blister'?'color:var(--red)':'color:var(--amber)'}">${l.foot_condition||'?'}</span></div>
+          ${l.heart_rate?'<div><span style="color:var(--muted);font-size:10px;">HR</span><br><span>'+l.heart_rate+' bpm</span></div>':''}
+        </div>
+        ${l.route_notes?'<div style="margin-top:6px;font-size:11px;color:var(--muted);font-style:italic;">'+l.route_notes+'</div>':''}
+        ${l.weather?'<div style="margin-top:4px;font-size:10px;color:var(--dim);">Weather: '+l.weather+'</div>':''}
+        ${l.gear_notes?'<div style="margin-top:4px;font-size:10px;color:var(--dim);">Gear: '+l.gear_notes+'</div>':''}`;
+    } else if (l.activity_type === 'run') {
+      const runType = details_parsed?.run_type || '?';
+      detailHtml = `
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(100px,1fr));gap:6px 16px;margin-top:8px;">
+          <div><span style="color:var(--muted);font-size:10px;">TYPE</span><br><span style="color:var(--blue2);">${runType.toUpperCase()}</span></div>
+          <div><span style="color:var(--muted);font-size:10px;">DISTANCE</span><br><span style="color:var(--od2);">${l.distance||'?'} mi</span></div>
+          <div><span style="color:var(--muted);font-size:10px;">TIME</span><br><span style="color:var(--od2);">${l.total_time||'?'}</span></div>
+          <div><span style="color:var(--muted);font-size:10px;">PACE</span><br><span style="color:var(--od2);">${l.pace||'?'}/mi</span></div>
+          <div><span style="color:var(--muted);font-size:10px;">RPE</span><br><span style="color:var(--od2);">${l.rpe||'?'}/10</span></div>
+          <div><span style="color:var(--muted);font-size:10px;">TERRAIN</span><br><span>${l.terrain||'?'}</span></div>
+          ${l.heart_rate?'<div><span style="color:var(--muted);font-size:10px;">HR</span><br><span>'+l.heart_rate+' bpm</span></div>':''}
+        </div>
+        ${l.route_notes?'<div style="margin-top:6px;font-size:11px;color:var(--muted);font-style:italic;">'+l.route_notes+'</div>':''}`;
+    } else if (l.activity_type === 'lift') {
+      const ex = details_parsed?.exercise?.replace(/_/g,' ') || '?';
+      const sets = details_parsed?.sets || [];
+      detailHtml = `
+        <div style="margin-top:8px;">
+          <div style="font-family:var(--font-c);font-weight:700;font-size:12px;color:var(--od2);letter-spacing:1px;margin-bottom:6px;">${ex.toUpperCase()}</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:4px;">
+            ${sets.map(s => `<div style="background:var(--surface2);border:1px solid var(--border);border-radius:2px;padding:4px 8px;font-family:var(--font-m);font-size:11px;text-align:center;">
+              <span style="color:var(--od2);">${s.reps}×${s.weight}#</span>${s.rpe?'<br><span style="font-size:9px;color:var(--muted);">RPE '+s.rpe+'</span>':''}
+            </div>`).join('')}
+          </div>
+          ${details_parsed?.tempo?'<div style="margin-top:6px;font-size:10px;color:var(--muted);">Tempo: '+details_parsed.tempo+'</div>':''}
+          ${details_parsed?.rest?'<div style="font-size:10px;color:var(--muted);">Rest: '+details_parsed.rest+'</div>':''}
+          ${details_parsed?.form_notes?'<div style="margin-top:4px;font-size:11px;color:var(--tan);font-style:italic;">'+details_parsed.form_notes+'</div>':''}
+        </div>`;
+    }
+    
+    html += `
+      <div class="card activity-entry" data-type="${l.activity_type}" style="margin-bottom:10px;">
+        <div class="card-body">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:4px;">
+            <span style="font-family:var(--font-m);font-size:10px;color:var(--muted);min-width:70px;">${l.activity_date||''}</span>
+            <span class="day-tag ${typeColors[l.activity_type]}" style="font-size:9px;">${typeIcons[l.activity_type]} ${l.activity_type.toUpperCase()}</span>
+            ${l.is_pr?'<span style="font-family:var(--font-c);font-size:9px;color:var(--amber);letter-spacing:1px;">🏆 PR</span>':''}
+          </div>
+          ${detailHtml}
+        </div>
+      </div>`;
+  });
+  
+  html += `</div>`;
+  $('panel-activity').innerHTML = html;
+}
+
+function filterActivityTab(type, btn) {
+  btn.closest('.tab-bar').querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.activity-entry').forEach(el => {
+    el.style.display = (type === 'all' || el.dataset.type === type) ? '' : 'none';
+  });
+}
+
+// ── ROSTER ───────────────────────────────────────────────────
+async function buildRoster() {
+  ALL_PROFILES = await dbGet('profiles');
+
+  // Group profiles by name (case-insensitive) — show each person once
+  const grouped = {};
+  ALL_PROFILES.forEach(p => {
+    const key = p.name.toLowerCase();
+    if (!grouped[key]) grouped[key] = [];
+    grouped[key].push(p);
+  });
+
+  const people = Object.values(grouped);
+  let html = `<div class="panel-title">TEAM ROSTER</div><div class="panel-sub">${people.length} MEMBERS</div>
+    <div class="search-bar"><input type="text" placeholder="Search..." oninput="filterRoster(this.value)"></div>
+    <div id="roster-grid">`;
+
+  people.forEach(profiles => {
+    const primary = profiles.find(p => p.role === 'admin') || profiles[0];
+    const paths = profiles.map(p => p.path === 'sfas' ? 'SFAS' : 'EOD+SFAS');
+    const bestStreak = Math.max(...profiles.map(p => p.current_streak || 0));
+    const bestLongest = Math.max(...profiles.map(p => p.longest_streak || 0));
+    const isAdmin = profiles.some(p => p.role === 'admin');
+    const phases = profiles.map(p => `${p.path==='sfas'?'S':'E+S'}: ${p.current_phase.toUpperCase()} WK${p.current_week}`).join(' · ');
+
+    html += `<div class="card roster-card" data-name="${primary.name.toLowerCase()}">
+      <div class="card-body" style="display:flex;align-items:center;gap:12px;">
+        <div style="width:36px;height:36px;background:var(--surface2);border:1px solid var(--od);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:var(--font-c);font-weight:900;font-size:14px;color:var(--od2);">${primary.name.charAt(0)}</div>
+        <div style="flex:1;">
+          <div style="font-family:var(--font-c);font-weight:700;font-size:13px;letter-spacing:1px;">${primary.name} ${isAdmin?'<span style="font-size:9px;color:var(--amber);">[ADMIN]</span>':''}</div>
+          <div style="font-family:var(--font-m);font-size:10px;color:var(--muted);">${paths.join(' + ')} · ${phases} · 🔥${bestStreak}</div>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-family:var(--font-m);font-size:11px;color:var(--od2);">${primary.bodyweight||'?'} lbs</div>
+          <div style="font-family:var(--font-m);font-size:9px;color:var(--dim);">PU: ${primary.pullup_max||'?'}</div>
+        </div>
+      </div>
+    </div>`;
+  });
+  html += `</div>`;
+  $('panel-roster').innerHTML = html;
+}
+function filterRoster(q) {
+  const lower = q.toLowerCase();
+  document.querySelectorAll('.roster-card').forEach(c => {
+    c.style.display = c.dataset.name.includes(lower) ? '' : 'none';
+  });
+}
+
+// ── MESSAGES ─────────────────────────────────────────────────
+async function buildMessages() {
+  const msgs = await dbGet('messages');
+  msgs.sort((a,b) => (a.created_at||'').localeCompare(b.created_at||''));
+
+  let html = `<div class="panel-title">TEAM COMMS</div><div class="panel-sub">GENERAL CHANNEL</div>`;
+  html += `<div style="max-height:400px;overflow-y:auto;margin-bottom:12px;" id="msg-feed">`;
+  msgs.forEach(m => {
+    const author = ALL_PROFILES.find(p=>p.id===m.profile_id);
+    const isMe = m.profile_id === ME.id;
+    html += `<div style="margin-bottom:8px;${isMe?'text-align:right':''}">
+      <div style="font-family:var(--font-c);font-size:10px;color:var(--muted);letter-spacing:1px;">${author?.name||'?'} · ${new Date(m.created_at).toLocaleString()}</div>
+      <div style="display:inline-block;background:${isMe?'rgba(122,140,74,.15)':'var(--surface2)'};border:1px solid ${isMe?'var(--od)':'var(--border)'};border-radius:4px;padding:8px 12px;font-size:12px;max-width:80%;">${m.body}</div>
+    </div>`;
+  });
+  html += `</div>`;
+  html += `<div style="display:flex;gap:8px;">
+    <input type="text" id="msg-input" placeholder="Type a message..." onkeypress="if(event.key==='Enter')sendMessage()">
+    <button class="btn btn-primary btn-sm" onclick="sendMessage()">SEND</button>
+  </div>`;
+  $('panel-messages').innerHTML = html;
+  // Scroll to bottom
+  setTimeout(() => { const feed=$('msg-feed'); if(feed) feed.scrollTop=feed.scrollHeight; }, 100);
+}
+
+async function sendMessage() {
+  const body = $('msg-input').value.trim();
+  if (!body) return;
+  await dbInsert('messages', {profile_id: ME.id, body, channel:'general'});
+  $('msg-input').value = '';
+  buildMessages();
+}
+
+// ── ADMIN ────────────────────────────────────────────────────
+async function buildAdmin() {
+  if (ME.role !== 'admin') { $('panel-admin').innerHTML = '<div class="panel-title">ACCESS DENIED</div>'; return; }
+
+  const codes = await dbGet('invite_codes');
+  const unused = codes.filter(c => !c.used);
+
+  let html = `<div class="panel-title">ADMIN PANEL</div><div class="panel-sub">ROSTER & INVITE MANAGEMENT</div>
+    <button class="btn btn-primary btn-sm" onclick="openModal('modal-generate-codes')" style="margin-bottom:16px;">⊕ GENERATE INVITE CODES</button>
+    <div class="card"><div class="card-header"><div class="card-title">AVAILABLE CODES (${unused.length})</div></div><div class="card-body">`;
+  if (unused.length) {
+    unused.forEach(c => {
+      html += `<div style="display:flex;align-items:center;padding:4px 0;border-bottom:1px solid var(--border);">
+        <span style="font-family:var(--font-m);font-size:12px;flex:1;">${c.code}</span>
+        <span style="font-family:var(--font-c);font-size:9px;color:var(--muted);letter-spacing:1px;">${c.role.toUpperCase()}</span>
+      </div>`;
+    });
+  } else {
+    html += '<div style="color:var(--muted);font-size:12px;">No unused codes. Generate more above.</div>';
+  }
+  html += `</div></div>`;
+
+  // All profiles management
+  html += `<div class="card"><div class="card-header"><div class="card-title">ALL MEMBERS (${ALL_PROFILES.length})</div></div><div class="card-body">`;
+  ALL_PROFILES.forEach(p => {
+    html += `<div style="display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid var(--border);">
+      <span style="font-family:var(--font-c);font-weight:700;font-size:12px;flex:1;">${p.name}</span>
+      <span style="font-family:var(--font-m);font-size:9px;color:var(--muted);">${p.path} · ${p.role}</span>
+      <span style="font-family:var(--font-m);font-size:9px;color:var(--od);">${p.current_phase} wk${p.current_week}</span>
+    </div>`;
+  });
+  html += `</div></div>`;
+  $('panel-admin').innerHTML = html;
+}
+
+async function generateCodes() {
+  const count = parseInt($('gen-count').value) || 5;
+  const role = $('gen-role').value;
+  const codes = [];
+  for (let i = 0; i < count; i++) {
+    const num = String(Date.now()).slice(-4) + String(i).padStart(2,'0');
+    const code = `MJ-${role==='admin'?'ADM':'MBR'}-${num}`;
+    await dbInsert('invite_codes', {code, role, used: false, created_by: ME.id});
+    codes.push(code);
+  }
+  $('gen-results').innerHTML = `<div style="font-family:var(--font-m);font-size:11px;color:var(--od2);">Generated:<br>${codes.join('<br>')}</div>`;
+  notify(`${count} codes generated.`);
+}
+
+// ── PROFILE ──────────────────────────────────────────────────
+function buildProfile() {
+  const p = ME;
+  let html = `<div class="panel-title">MY PROFILE</div><div class="panel-sub">${p.name} · ${p.path==='sfas'?'SFAS ONLY':'EOD + SFAS'}</div>
+
+    <div class="stat-grid">
+      <div class="stat-block"><div class="stat-label">BODYWEIGHT</div><div class="stat-value">${p.bodyweight||'?'}<small>lbs</small></div></div>
+      <div class="stat-block"><div class="stat-label">SQUAT 1RM</div><div class="stat-value">${p.squat_1rm||'?'}<small>lbs</small></div></div>
+      <div class="stat-block"><div class="stat-label">BENCH 1RM</div><div class="stat-value">${p.bench_1rm||'?'}<small>lbs</small></div></div>
+      <div class="stat-block"><div class="stat-label">DEADLIFT 1RM</div><div class="stat-value">${p.deadlift_1rm||'?'}<small>lbs</small></div></div>
+      <div class="stat-block"><div class="stat-label">PRESS 1RM</div><div class="stat-value">${p.press_1rm||'?'}<small>lbs</small></div></div>
+      <div class="stat-block"><div class="stat-label">PULL-UPS</div><div class="stat-value">${p.pullup_max||'?'}</div></div>
+    </div>
+
+    <div class="card"><div class="card-header"><div class="card-title">UPDATE PROFILE</div></div><div class="card-body">
+      <div class="setup-grid">
+        <div class="modal-row"><label>BODYWEIGHT</label><input type="number" id="p-bw" value="${p.bodyweight||''}"></div>
+        <div class="modal-row"><label>SQUAT 1RM</label><input type="number" id="p-squat" value="${p.squat_1rm||''}"></div>
+        <div class="modal-row"><label>BENCH 1RM</label><input type="number" id="p-bench" value="${p.bench_1rm||''}"></div>
+        <div class="modal-row"><label>DEADLIFT 1RM</label><input type="number" id="p-dl" value="${p.deadlift_1rm||''}"></div>
+        <div class="modal-row"><label>PRESS 1RM</label><input type="number" id="p-press" value="${p.press_1rm||''}"></div>
+        <div class="modal-row"><label>TRAP BAR 1RM</label><input type="number" id="p-trap" value="${p.trap_1rm||''}"></div>
+        <div class="modal-row"><label>PULL-UP MAX</label><input type="number" id="p-pullups" value="${p.pullup_max||''}"></div>
+        <div class="modal-row"><label>3-MILE RUN</label><input type="text" id="p-run3mi" value="${p.run_3mile||''}"></div>
+      </div>
+      <div class="setup-grid" style="margin-top:10px;">
+        <div class="modal-row"><label>PHASE</label>
+          <select id="p-phase">
+            ${['base','build','peak','taper'].map(ph => `<option value="${ph}" ${ph===p.current_phase?'selected':''}>${ph.toUpperCase()}</option>`).join('')}
+          </select></div>
+        <div class="modal-row"><label>WEEK</label>
+          <select id="p-week">
+            ${[1,2,3,4].map(w => `<option value="${w}" ${w===p.current_week?'selected':''}>${w}</option>`).join('')}
+          </select></div>
+      </div>
+      ${p.path==='eod_sfas'?`<div class="setup-grid" style="margin-top:10px;">
+        <div class="modal-row"><label>EOD PHASE</label><input type="number" id="p-eod-phase" value="${p.eod_phase||1}" min="1" max="6"></div>
+        <div class="modal-row"><label>EOD WEEK</label><input type="number" id="p-eod-week" value="${p.eod_week||1}" min="1" max="4"></div>
+      </div>`:''}
+      <button class="btn btn-primary btn-block" onclick="updateProfile()" style="margin-top:14px;">SAVE CHANGES</button>
+    </div></div>
+
+    <div class="card"><div class="card-header"><div class="card-title">ADVANCE PHASE</div></div><div class="card-body">
+      <div style="font-size:12px;color:var(--muted);margin-bottom:10px;">Current: ${p.current_phase.toUpperCase()} → Week ${p.current_week}</div>
+      <button class="btn btn-sm" onclick="advanceWeek()">ADVANCE TO NEXT WEEK</button>
+      <button class="btn btn-sm" onclick="advancePhase()">ADVANCE TO NEXT PHASE</button>
+    </div></div>
+  `;
+  $('panel-profile').innerHTML = html;
+}
+
+async function updateProfile() {
+  const updates = {
+    bodyweight: parseInt($('p-bw').value) || ME.bodyweight,
+    squat_1rm: parseInt($('p-squat').value) || ME.squat_1rm,
+    bench_1rm: parseInt($('p-bench').value) || ME.bench_1rm,
+    deadlift_1rm: parseInt($('p-dl').value) || ME.deadlift_1rm,
+    press_1rm: parseInt($('p-press').value) || ME.press_1rm,
+    trap_1rm: parseInt($('p-trap').value) || ME.trap_1rm,
+    pullup_max: parseInt($('p-pullups').value) || ME.pullup_max,
+    run_3mile: $('p-run3mi').value.trim() || ME.run_3mile,
+    current_phase: $('p-phase').value,
+    current_week: parseInt($('p-week').value),
+  };
+  if (ME.path === 'eod_sfas') {
+    updates.eod_phase = parseInt($('p-eod-phase').value) || ME.eod_phase;
+    updates.eod_week = parseInt($('p-eod-week').value) || ME.eod_week;
+  }
+  await dbUpdate('profiles', ME.id, updates);
+  Object.assign(ME, updates);
+  notify('Profile updated.');
+  buildProfile();
+}
+
+async function advanceWeek() {
+  const phases = ['base','build','peak','taper'];
+  let newWeek = ME.current_week + 1;
+  let newPhase = ME.current_phase;
+  if (newWeek > 4) {
+    newWeek = 1;
+    const idx = phases.indexOf(ME.current_phase);
+    if (idx < phases.length - 1) {
+      newPhase = phases[idx + 1];
+    } else {
+      newPhase = 'base'; // Restart cycle at higher baseline
+      notify('Cycle complete! Restarting at BASE with new baselines.');
+    }
+  }
+  await dbUpdate('profiles', ME.id, {current_week: newWeek, current_phase: newPhase});
+  ME.current_week = newWeek;
+  ME.current_phase = newPhase;
+  notify(`Advanced to ${newPhase.toUpperCase()} Week ${newWeek}`);
+  buildProfile();
+}
+
+async function advancePhase() {
+  const phases = ['base','build','peak','taper'];
+  const idx = phases.indexOf(ME.current_phase);
+  const newPhase = idx < phases.length - 1 ? phases[idx+1] : 'base';
+  await dbUpdate('profiles', ME.id, {current_phase: newPhase, current_week: 1});
+  ME.current_phase = newPhase;
+  ME.current_week = 1;
+  notify(`Advanced to ${newPhase.toUpperCase()} Phase`);
+  buildProfile();
+}
+
+// ═══════════════════════════════════════════════════════════════
+// INITIALIZATION
+// ═══════════════════════════════════════════════════════════════
+async function init() {
+  await initSupabase();
+
+  // Check for saved session
+  const savedId = localStorage.getItem('mj_active_profile');
+  if (savedId) {
+    const profiles = await dbGet('profiles', {id: savedId});
+    if (profiles.length) {
+      ME = profiles[0];
+      await enterApp();
+      return;
+    }
+  }
+
+  // No saved session — show login
+  $('loading').style.display = 'none';
+  showScreen('screen-login');
+
+  // Set default date for log inputs
+  const todayVal = today();
+  if ($('log-date')) $('log-date').value = todayVal;
+  if ($('test-date')) $('test-date').value = todayVal;
+}
+
+init();
+</script>
+</body>
+</html>
